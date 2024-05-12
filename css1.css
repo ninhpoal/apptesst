@@ -1,1 +1,389 @@
 
+body {
+    background: rgb(204, 204, 204);
+}
+
+page {
+    background: white;
+    display: block;
+    margin: 0 auto;
+    margin-bottom: 0.5cm;
+    box-shadow: 0 0 0.5cm rgba(0, 0, 0, 0.5);
+}
+
+page[size="A4"][layout="portrait"] {
+    width: 21cm;
+    height: 29.7cm;
+}
+
+page[size="A4"][layout="landscape"] {
+    width: 29.7cm;
+    height: 21cm;
+}
+
+page[size="A3"][layout="portrait"] {
+    width: 29.7cm;
+    height: 42cm;
+}
+
+page[size="A3"][layout="landscape"] {
+    width: 42cm;
+    height: 29.7cm;
+}
+
+page[size="A5"][layout="portrait"] {
+    width: 14.8cm;
+    height: 21cm;
+}
+
+page[size="A5"][layout="landscape"] {
+    width: 21cm;
+    height: 14.8cm;
+}
+
+@media print {
+
+    body,
+    #content {
+        margin: 0;
+        box-shadow: 0;
+        font-size: 14px !important;
+    }
+
+    .big-title {
+        font-size: 18px !important;
+    }
+
+    .total-pay {
+        font-size: 15px !important;
+    }
+
+    @page {
+        size: auto;
+    }
+}
+
+#content {
+    font-size: 10.5px;
+}
+
+.total-pay {
+    font-size: 12px;
+}
+
+.big-title {
+    font-size: 15px;
+}
+
+#fixed-panel,
+#fixed-show-user,
+#fixed-show-reason {
+    font-size: 13px;
+}
+
+
+#content {
+    padding: 40px 40px;
+}
+
+#select-setup-print {
+    position: relative;
+    top: -2px;
+    background-color: #17a2b8;
+    color: white;
+}
+
+#setup-print {
+    position: fixed;
+    top: 480px;
+    left: 30px;
+    width: 150px;
+    height: 54px;
+    background-color: #ffffff;
+    padding: 10px;
+    border-radius: 5px;
+    /*font-size: 13px;*/
+    box-shadow: 0 0 0.5cm rgba(0, 0, 0, 0.5);
+}
+
+
+.heigth-90px {
+    height: 90px !important;
+}
+
+#page {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.table tr td,
+.table tr th {
+    padding: 5px !important;
+}
+
+.big-title {
+    text-transform: uppercase;
+    font-weight: bold;
+    /*font-size: 15px;*/
+    padding-bottom: 5px;
+}
+
+hr {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.table {
+    margin-bottom: 10px;
+}
+
+.cell-right {
+    text-align: right;
+}
+
+.cell-center {
+    text-align: center;
+}
+
+#fixed-panel {
+    /*position: fixed;*/
+    /*top: 20px;*/
+    /*left: 30px;*/
+    /*width: 150px;*/
+    /*height: 168px;*/
+    /*background-color: #ffffff;*/
+    /*padding: 10px;*/
+    /*border-radius: 5px;*/
+    /*!*font-size: 13px;*!*/
+    /*box-shadow: 0 0 0.5cm rgba(0, 0, 0, 0.5);*/
+}
+
+#fixed-show-user {
+    position: fixed;
+    top: 195px;
+    left: 30px;
+    width: 150px;
+    height: 60px;
+    background-color: #ffffff;
+    padding: 10px;
+    border-radius: 5px;
+    /*font-size: 13px;*/
+    box-shadow: 0 0 0.5cm rgba(0, 0, 0, 0.5);
+}
+
+#list_option_print {
+
+    position: fixed;
+    top: 20px;
+    left: 30px;
+    width: 180px;
+    background-color: #ffffff;
+    padding: 10px;
+    border-radius: 5px;
+    /*font-size: 13px;*/
+    box-shadow: 0 0 0.5cm rgba(0, 0, 0, 0.5);
+}
+
+#fixed-show-reason {
+    position: fixed;
+    top: 275px;
+    left: 30px;
+    width: 150px;
+    height: 54px;
+    background-color: #ffffff;
+    padding: 10px;
+    border-radius: 5px;
+    /*font-size: 13px;*/
+    box-shadow: 0 0 0.5cm rgba(0, 0, 0, 0.5);
+}
+
+#change-language-print {
+    position: fixed;
+    top: 347px;
+    left: 30px;
+    width: 150px;
+    height: 58px;
+    background-color: #ffffff;
+    padding: 10px;
+    border-radius: 5px;
+    /*font-size: 13px;*/
+    box-shadow: 0 0 0.5cm rgba(0, 0, 0, 0.5);
+}
+
+#option_print {
+    position: fixed;
+    top: 414px;
+    left: 30px;
+    width: 150px;
+    height: 58px;
+    background-color: #ffffff;
+    padding: 10px;
+    border-radius: 5px;
+    /*font-size: 13px;*/
+    box-shadow: 0 0 0.5cm rgba(0, 0, 0, 0.5);
+}
+
+.div-logo {
+    position: absolute;
+    top: 30px;
+    left: 30px;
+}
+
+.logo-center {
+    max-width: 177px !important;
+    max-height: 71px !important;
+}
+
+
+.logo-center {
+    max-width: 177px !important;
+    max-height: 100px !important;
+}
+
+
+.yolo-logo-center {
+    max-width: 90% !important;
+    max-height: 50px !important;
+}
+
+.change-language-print {
+    position: relative;
+    top: -2px;
+    background-color: #17a2b8;
+    color: white;
+}
+
+.btn-info .language_reason_for_deduction {
+    position: relative;
+    left: -9px;
+}
+
+.receipt_voucher {
+    font-size: 20px;
+    text-transform: uppercase;
+    font-weight: bold;
+    margin-top: 16px;
+    white-space: nowrap;
+}
+
+.receipt_id {
+    margin-top: 48px;
+}
+
+.info_student {
+    margin-top: 10px;
+}
+
+.unit_info {
+    text-align: right;
+    margin-top: 5px;
+}
+
+.div_table {
+    margin-bottom: 5px !important
+}
+
+.info_contract {
+    margin-bottom: 5px !important
+}
+
+/*.text-more{*/
+/*font-size: 11px;*/
+/*}*/
+
+.table_bill_item {
+    margin-top: 15px
+}
+
+.reason_view {
+    padding-top: 10px
+}
+
+.promotion_info {
+    padding-top: 10px
+}
+
+.div_money {
+    width: 55%;
+    float: right;
+    text-align: right;
+    padding-top: 10px
+}
+
+.text_note {
+    margin-left: 4px
+}
+
+.div_signature {
+    margin-top: 20px
+}
+
+.margin_60 {
+    margin-top: 60px
+}
+
+.height_split {
+    height: 14.7cm;
+}
+
+.height_hr {
+    margin-bottom: 0.1cm;
+}
+
+
+/*.height_split{*/
+/*height: 555.59px;*/
+/*}*/
+/*.height_hr{*/
+/*margin-bottom: 0.1cm;*/
+/*}*/
+
+#content-split .div-logo {
+    position: relative;
+    top: 0px;
+    left: -10px;
+}
+
+
+.height_hr {
+    border-top: 3px dashed black;
+    width: 100%;
+    position: absolute;
+    top: 50%;
+    left: 0;
+}
+
+@media print {
+
+    #content-split {
+        margin-top: 40px;
+        position: absolute;
+        top: 50%;
+        width: 920px;
+    }
+
+    .height_hr {
+        border-top: 3px dashed black;
+        width: 100%;
+        position: absolute;
+        top: 49%;
+    }
+
+    #content-split .div-logo {
+        position: relative;
+        top: -10px;
+        left: 10px;
+    }
+
+}
+
+@media only screen and (max-width: 1024px) {
+    #fixed-panel {
+        display: none !important;
+    }
+
+    #list_option_print {
+        display: none !important;
+    }
+}
