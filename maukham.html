@@ -1,397 +1,737 @@
-<!DOCTYPE html>
-<html lang="vi">
+<!doctype html>
+<meta charset="utf-8">
+<title>Hóa đơn</title>
+<meta name="csrf-token" content="MHMXdIG4tBlzbq7sMs8y0wjq43Dtbf8PaMgnKDS3">
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Giấy Đề Nghị Thanh Toán</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+<!-- jQuery library -->
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.slim.min.js"></script>
 
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
-        integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
-        crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
-        integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"
-        crossorigin="anonymous"></script>
-    <style>
+<!-- Popper JS -->
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+
+<!-- Latest compiled JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
+
+
+<style>
+    body {
+        background: rgb(204, 204, 204);
+    }
+
+    page {
+        background: white;
+        display: block;
+        margin: 0 auto;
+        margin-bottom: 0.5cm;
+        box-shadow: 0 0 0.5cm rgba(0, 0, 0, 0.5);
+    }
+
+    page[size="A4"][layout="portrait"] {
+        width: 21cm;
+        height: 29.7cm;
+    }
+
+    page[size="A4"][layout="landscape"] {
+        width: 29.7cm;
+        height: 21cm;
+    }
+
+    page[size="A3"][layout="portrait"] {
+        width: 29.7cm;
+        height: 42cm;
+    }
+
+    page[size="A3"][layout="landscape"] {
+        width: 42cm;
+        height: 29.7cm;
+    }
+
+    page[size="A5"][layout="portrait"] {
+        width: 14.8cm;
+        height: 21cm;
+    }
+
+    page[size="A5"][layout="landscape"] {
+        width: 21cm;
+        height: 14.8cm;
+    }
+
+    @media print {
+
+        body,
+        #content {
+            margin: 0;
+            box-shadow: 0;
+            font-size: 14px !important;
+        }
+
+        .big-title {
+            font-size: 18px !important;
+        }
+
+        .total-pay {
+            font-size: 15px !important;
+        }
+
         @page {
-            size: A4;
-            margin: 20mm;
+            size: auto;
+        }
+    }
+
+    #content {
+        font-size: 10.5px;
+    }
+
+    .total-pay {
+        font-size: 12px;
+    }
+
+    .big-title {
+        font-size: 15px;
+    }
+
+    #fixed-panel,
+    #fixed-show-user,
+    #fixed-show-reason {
+        font-size: 13px;
+    }
+
+
+    #content {
+        padding: 40px 40px;
+    }
+
+    #select-setup-print {
+        position: relative;
+        top: -2px;
+        background-color: #17a2b8;
+        color: white;
+    }
+
+    #setup-print {
+        position: fixed;
+        top: 480px;
+        left: 30px;
+        width: 150px;
+        height: 54px;
+        background-color: #ffffff;
+        padding: 10px;
+        border-radius: 5px;
+        /*font-size: 13px;*/
+        box-shadow: 0 0 0.5cm rgba(0, 0, 0, 0.5);
+    }
+
+
+    .heigth-90px {
+        height: 90px !important;
+    }
+
+    #page {
+        margin-top: 20px;
+        margin-bottom: 20px;
+        position: relative;
+    }
+
+    .table tr td,
+    .table tr th {
+        padding: 5px !important;
+    }
+
+    .big-title {
+        text-transform: uppercase;
+        font-weight: bold;
+        /*font-size: 15px;*/
+        padding-bottom: 5px;
+    }
+
+    hr {
+        margin-top: 5px;
+        margin-bottom: 5px;
+    }
+
+    .bold {
+        font-weight: bold;
+    }
+
+    .table {
+        margin-bottom: 10px;
+    }
+
+    .cell-right {
+        text-align: right;
+    }
+
+    .cell-center {
+        text-align: center;
+    }
+
+    #fixed-panel {
+        /*position: fixed;*/
+        /*top: 20px;*/
+        /*left: 30px;*/
+        /*width: 150px;*/
+        /*height: 168px;*/
+        /*background-color: #ffffff;*/
+        /*padding: 10px;*/
+        /*border-radius: 5px;*/
+        /*!*font-size: 13px;*!*/
+        /*box-shadow: 0 0 0.5cm rgba(0, 0, 0, 0.5);*/
+    }
+
+    #fixed-show-user {
+        position: fixed;
+        top: 195px;
+        left: 30px;
+        width: 150px;
+        height: 60px;
+        background-color: #ffffff;
+        padding: 10px;
+        border-radius: 5px;
+        /*font-size: 13px;*/
+        box-shadow: 0 0 0.5cm rgba(0, 0, 0, 0.5);
+    }
+
+    #list_option_print {
+
+        position: fixed;
+        top: 20px;
+        left: 30px;
+        width: 180px;
+        background-color: #ffffff;
+        padding: 10px;
+        border-radius: 5px;
+        /*font-size: 13px;*/
+        box-shadow: 0 0 0.5cm rgba(0, 0, 0, 0.5);
+    }
+
+    #fixed-show-reason {
+        position: fixed;
+        top: 275px;
+        left: 30px;
+        width: 150px;
+        height: 54px;
+        background-color: #ffffff;
+        padding: 10px;
+        border-radius: 5px;
+        /*font-size: 13px;*/
+        box-shadow: 0 0 0.5cm rgba(0, 0, 0, 0.5);
+    }
+
+    #change-language-print {
+        position: fixed;
+        top: 347px;
+        left: 30px;
+        width: 150px;
+        height: 58px;
+        background-color: #ffffff;
+        padding: 10px;
+        border-radius: 5px;
+        /*font-size: 13px;*/
+        box-shadow: 0 0 0.5cm rgba(0, 0, 0, 0.5);
+    }
+
+    #option_print {
+        position: fixed;
+        top: 414px;
+        left: 30px;
+        width: 150px;
+        height: 58px;
+        background-color: #ffffff;
+        padding: 10px;
+        border-radius: 5px;
+        /*font-size: 13px;*/
+        box-shadow: 0 0 0.5cm rgba(0, 0, 0, 0.5);
+    }
+
+    .div-logo {
+        position: absolute;
+        top: 30px;
+        left: 30px;
+    }
+
+    .logo-center {
+        max-width: 177px !important;
+        max-height: 71px !important;
+    }
+
+
+    .logo-center {
+        max-width: 177px !important;
+        max-height: 100px !important;
+    }
+
+
+    .yolo-logo-center {
+        max-width: 90% !important;
+        max-height: 50px !important;
+    }
+
+    .change-language-print {
+        position: relative;
+        top: -2px;
+        background-color: #17a2b8;
+        color: white;
+    }
+
+    .btn-info .language_reason_for_deduction {
+        position: relative;
+        left: -9px;
+    }
+
+    .receipt_voucher {
+        font-size: 20px;
+        text-transform: uppercase;
+        font-weight: bold;
+        margin-top: 16px;
+        white-space: nowrap;
+    }
+
+    .receipt_id {
+        margin-top: 48px;
+    }
+
+    .info_student {
+        margin-top: 10px;
+    }
+
+    .unit_info {
+        text-align: right;
+        margin-top: 5px;
+    }
+
+    .div_table {
+        margin-bottom: 5px !important
+    }
+
+    .info_contract {
+        margin-bottom: 5px !important
+    }
+
+    /*.text-more{*/
+    /*font-size: 11px;*/
+    /*}*/
+
+    .table_bill_item {
+        margin-top: 15px
+    }
+
+    .reason_view {
+        padding-top: 10px
+    }
+
+    .promotion_info {
+        padding-top: 10px
+    }
+
+    .div_money {
+        width: 55%;
+        float: right;
+        text-align: right;
+        padding-top: 10px
+    }
+
+    .text_note {
+        margin-left: 4px
+    }
+
+    .div_signature {
+        margin-top: 20px
+    }
+
+    .margin_60 {
+        margin-top: 60px
+    }
+
+    .height_split {
+        height: 14.7cm;
+    }
+
+    .height_hr {
+        margin-bottom: 0.1cm;
+    }
+
+
+    /*.height_split{*/
+    /*height: 555.59px;*/
+    /*}*/
+    /*.height_hr{*/
+    /*margin-bottom: 0.1cm;*/
+    /*}*/
+
+    #content-split .div-logo {
+        position: relative;
+        top: 0px;
+        left: -10px;
+    }
+
+
+    .height_hr {
+        border-top: 3px dashed black;
+        width: 100%;
+        position: absolute;
+        top: 50%;
+        left: 0;
+    }
+
+    @media print {
+
+        #content-split {
+            margin-top: 40px;
+            position: absolute;
+            top: 50%;
+            width: 920px;
         }
 
-        body {
-            font-family: "Calibri", sans-serif;
-            width: 210mm;
-            margin: 0 auto;
-        }
-
-        .container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        .height_hr {
+            border-top: 3px dashed black;
             width: 100%;
+            position: absolute;
+            top: 49%;
         }
 
-        .center-image {
-            margin: 0 auto;
-            margin-right: 230px;
+        #content-split .div-logo {
+            position: relative;
+            top: -10px;
+            left: 10px;
         }
 
-        .qrcode {
-            border: 2px solid #e083af;
+    }
+
+    @media only screen and (max-width: 1024px) {
+        #fixed-panel {
+            display: none !important;
         }
 
-        p {
-            text-align: justify;
+        #list_option_print {
+            display: none !important;
         }
-
-        .center {
-            text-align: center;
-        }
-
-        .highlighted-section {
-            height: 130px;
-            border-radius: 10px;
-            padding: 10px;
-            background: url('img/Image_004.png') no-repeat center center;
-            background-size: cover;
-        }
-
-        .right {
-            text-align: right;
-        }
-
-        .bold {
-            font-weight: bold;
-        }
-
-        .underline {
-            text-decoration: underline;
-        }
-
-        .signature {
-            margin-top: 50px;
-        }
-
-        .content {
-            margin-left: 40px;
-        }
-
-        .red {
-            color: red;
-        }
-
-        .buttons {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .table1 {
-            width: 100%;
-            border-collapse: collapse;
-
-        }
-
-        .table1 th,
-        td {
-
-            padding: 1px;
-
-            border: 1px solid black;
-        }
-
-        .table1 th {
-            background-color: #979494;
-        }
-
-        @media print {
-            body {
-                margin: 0;
-                width: 100%;
-            }
-
-            .container {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                width: 100%;
-            }
-
-            .center-image {
-                margin: 0 auto;
-                margin-right: 100px;
-            }
-
-            #footer {
-                position: fixed;
-                bottom: 0;
-                width: 100%;
-                text-align: right;
-                padding: 10px 0;
-            }
-
-            #in {
-                display: none;
-            }
-
-            #content {
-                width: 100%;
-            }
-
-        }
-    </style>
-</head>
+    }
+</style>
 
 <body>
-    <div id="in">
-        <button type="button" class="btn btn-outline-primary" onclick="window.print()">In hoặc xuất PDF</button>
+    <page size="A4" id="page" layout="portrait">
+        <div id="content">
+            <div class="content_page1">
+                <div>
+                    <div style="width: 25%; float: right; text-align: right">
+                        <img id="qrcode" class="logo-center">
+                    </div>
+                    <div style="width: 50%; float: right">
+                        <div class="big-title">MEDIC HOAN MY SAI GON CLINIC</div>
+                        <div><span class='language_address'></span> : 588 Ha Huy Giap Street - Thanh Loc,
+                            District 12, Ho Chi Minh City.
+                        </div>
+                    </div>
+                    <div style="width: 25%; float: right">
+                        <div class="div-logo" style="width: 23%;">
+                            <div class="text-center">
+                                <img style="margin-top: 10px;" src="img/Image_003.jpg" class="logo-center">
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div style="clear: both"></div>
+                <hr>
+                <div class="big-title" style="text-align: center;"><span>PHIẾU KHÁM SỨC KHỎE TỔNG QUÁT </span></div>
+                <div class="info_student"><span class="bold">Thông tin người đăng ký</span>
+                    <div class="info_parent option_print_parent_info">
+                        <div style="width: 50%; float: right">
+
+                            <div>Công việc: <span id="year"></span></div>
+                            <div>Đặc thù môi trường làm việc: <span id="month"></span></div>
+                            <div>Tên Công ty/Tổ chức đang làm việc: <span id="chinhanh"></span></div>
+                            <div>Người/Tổ chức giới thiệu: <span id="chinhanh"></span></div>
+                            <div>Bạn đã tin Chúa chưa <span id="chinhanh"></span></div>
+                            <div>Địa chỉ trả kết quả<span id="chinhanh"></span></div>
+                        </div>
+                    </div>
+
+                    <div style="width: 50%; float: right">
+                        <div>Họ & Tên Người đăng ký Khám: <span id="namehs"></span></div>
+                        <div>Hình ảnh: <span id="phuongthuctt"></span> </div>
+                        <div>Ngày sinh: <span id="ngaythanhtoan"></span>
+                        </div>
+                        <div>Địa chỉ email: <span id="phuongthuctt"></span> </div>
+                        <div>Số CMND/CCCD/ Passport/Mã định danh: <span id="phuongthuctt"></span> </div>
+                        <div>Số điện thoại liên lạc: <span id="phuongthuctt"></span> </div>
+
+                    </div>
+
+                </div>
+                <div style="clear: both"></div>
+                <div>
+                    <div class="info_parent option_print_parent_info">
+                        <div style="width: 50%; float: right">
+                            <div class="info_student"><span class="bold">Tiến độ khám bệnh và xử lý hồ sơ:</span></div>
+                            <div>Công việc: <span id="year"></span></div>
+                            <div>Đặc thù môi trường làm việc: <span id="month"></span></div>
+                            <div>Tên Công ty/Tổ chức đang làm việc: <span id="chinhanh"></span></div>
+                            <div>Người/Tổ chức giới thiệu: <span id="chinhanh"></span></div>
+                            <div>Bạn đã tin Chúa chưa <span id="chinhanh"></span></div>
+                            <div>Địa chỉ trả kết quả<span id="chinhanh"></span></div>
+                        </div>
+                    </div>
+
+                    <div style="width: 50%; float: right">
+                        <div class="info_student"><span class="bold">Thông tin chương trình khám:</span></div>
+                        <div>ID Chương trình: <span id="namehs"></span></div>
+                        <div>Chương trình Khám: <span id="phuongthuctt"></span> </div>
+                        <div>ID: <span id="ngaythanhtoan"></span>
+                        </div>
+                        <div>Ca Khám: <span id="phuongthuctt"></span> </div>
+                        <div>Xác nhận đọc hiểu quy trình khám: <span id="phuongthuctt"></span> </div>
+                        <div>Xác nhận chắc chắn đến khám: <span id="phuongthuctt"></span> </div>
+
+                    </div>
+
+                </div>
+                <div style="clear: both"></div>
+                <div>
+                    <div class="info_parent option_print_parent_info">
+                        <div style="width: 50%; float: right">
+                            <div class="info_student"><span class="bold">Chi phí:</span></div>
+                            <div>Tổng chi phí phát sinh:<span id="year"></span></div>
+                            <div>Tổng phí hỗ trợ: <span id="month"></span></div>
+                            <div>Tổng tiền phải thanh toán: <span id="chinhanh"></span></div>
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                            <div></div>
+
+                        </div>
+                    </div>
+
+                    <div style="width: 50%; float: right">
+                        <div class="info_student"><span class="bold">Tiến độ khám sức khỏe:</span></div>
+                        <div>Thời gian tới khám:<span id="year"></span></div>
+                        <div>Kiểm tra cơ bản: <span id="month"></span></div>
+                        <div>Khám nội tổng quát: <span id="chinhanh"></span></div>
+                        <div>Xét nghiệm máu : <span id="chinhanh"></span></div>
+                        <div>Bạn đã tin Chúa chưa: <span id="chinhanh"></span></div>
+                        <div>Xét nghiệm nước tiểu:<span id="chinhanh"></span></div>
+                        <div>Khám da liễu:<span id="chinhanh"></span></div>
+                        <div>Soi mao mạch:<span id="chinhanh"></span></div>
+                        <div>Khám mắt:<span id="chinhanh"></span></div>
+                     
+                    </div>
+
+                </div>
+                <div class="option_print_bill_item">
+                    <table class="table table-bordered table_bill_item">
+                        <thead>
+                            <tr>
+                                <th><span class='language_stt'></span></th>
+                                <th><span class='language_namepro'></span></th>
+                                <th class="cell-center"><span class='language_quantity'></span></th>
+                                <th class="cell-right"><span class='language_total_fee'> </span> (đ)</th>
+                                <th class="cell-right option_print_promotion"><span class='language_promotion'> </span>
+                                    (đ)
+                                </th>
+
+                                </th>
+                                <th class="cell-right"><span class='language_amount_paid'></span> (đ)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>01
+
+                                </td>
+                                <td><span id="masp"></span>
+
+                                </td>
+                                <td class="cell-center">1</td>
+                                <td class="cell-right option_print_promotion"><span id="dongia"></span></td>
+                                <td class="cell-right">
+                                    <span id="discount"></span>
+                                </td>
+
+                                <td class="cell-right">
+                                    <span id="totalamount"></span>
+
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div style="clear: both"></div>
+                <div>
+                    <div style="width: 45%; float: left">
+                        <div class="reason_view">
+                            <span id="reason-view"><span class='language_reason_for_deduction'></span>: <span
+                                    class="text_reason"></span></span>
+                        </div>
+                    </div>
+                    <div class="div_money">
+                        <div class="total-pay"><span class='language_total_amount_paid'></span> :
+                            <strong> <span id="amount"></span>
+                            </strong>
+                        </div>
+                        <div><i><span class="language_total_amount_in_words"></span> : <span
+                                    class="money_word"></span></i></div>
+
+
+                    </div>
+                </div>
+                <div style="clear: both"></div>
+
+                <div class="div_signature">
+                    <div class="row" id="show_signature">
+                        <div class="col-6 text-center" id="payer_signature">
+                            <div><strong><span class='language_payer'></span></strong></div>
+                            <div>(<span class='language_signature'></span>, <span class='language_full_name'></span>)
+                            </div>
+                        </div>
+                        <div class="col-3 text-center" id="select-accountant">
+                            <div><strong><span class='language_accountant'></span></strong></div>
+                            <div>(<span class='language_signature'></span>, <span class='language_full_name'></span>)
+                            </div>
+                        </div>
+                        <div class="col-3 text-center" id="select-cashier">
+                            <div><strong><span class='language_cashier'></span></strong></div>
+                            <div>(<span class='language_signature'></span>, <span class='language_full_name'></span>)
+                            </div>
+                        </div>
+                        <div class="col-3 text-center" id="select-manage">
+                            <div><strong><span class='language_manage'></span></strong></div>
+                            <div>(<span class='language_signature'></span>, <span class='language_full_name'></span>)
+                            </div>
+                        </div>
+                        <div class="col-3 text-center" id="select-garenal-director">
+                            <div><strong><span class='language_garenal_director'></span></strong></div>
+                            <div>(<span class='language_signature'></span>, <span class='language_full_name'></span>)
+                            </div>
+                        </div>
+                        <div class="col-6 text-center" id="collector_signature">
+                            <div><strong><span class='language_collector'></span></strong></div>
+                            <div>(<span class='language_signature'></span>, <span class='language_full_name'></span>)
+                            </div>
+                            <div class="margin_60"><strong id="creator"><span id="name"></span></strong></div>
+                        </div>
+                    </div>
+                </div>
+                <div style="clear: both"></div>
+            </div>
+        </div>
+    </page>
+
+
+
+    <div id="list_option_print">
+        <div class="form-group" hidden>
+            <div class="custom-control custom-radio">
+                <input type="radio" id="a5-landscape" data-layout="landscape" data-size="A5" name="layout"
+                    class="custom-control-input" value="1" checked>
+                <label class="custom-control-label" for="a5-landscape">A5 - <span class="language_landscape"></span>
+                </label>
+            </div>
+            <div class="custom-control custom-radio">
+                <input type="radio" id="a4-landscape" data-layout="landscape" data-size="A4" name="layout"
+                    class="custom-control-input" value="2">
+                <label class="custom-control-label" for="a4-landscape">A4 - <span
+                        class="language_landscape"></span></label>
+            </div>
+            <div class="custom-control custom-radio">
+                <input type="radio" id="a4-portrait" data-layout="portrait" data-size="A4" name="layout"
+                    class="custom-control-input" value="3">
+                <label class="custom-control-label" for="a4-portrait">A4 - <span
+                        class="language_portrait"></span></label>
+            </div>
+            <div class="custom-control custom-radio">
+                <input type="radio" id="a4-split" data-layout="portrait" data-size="A4" name="layout"
+                    class="custom-control-input" value="3">
+                <label class="custom-control-label" for="a4-split">A4 - <span class="language_split"></span></label>
+            </div>
+        </div>
+        <button onclick="print()" class="btn btn-info" style="width: 100%"><i class="fa fa-print"></i> <span
+                class="language_print"></span></button>
+        <br>
+        <hr class="text-center" style="width: 80%; margin-top: 10px;">
+        <div id="tailc-fixed-show-user" hidden>
+            <div class="form-group">
+                <div class="custom-control custom-checkbox">
+                    <input type="checkbox" id="show-user" name="show_user" class="custom-control-input" value="1"
+                        checked onchange="toggleUser()">
+                    <label class="custom-control-label" for="show-user"><span class="language_show_user"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div id="tailc-fixed-show-reason" hidden>
+            <div class="form-group " hidden>
+                <button onclick="showReasonModal()" class="btn btn-info" style="width: 100%; font-size: 13px">
+                    <span class='language_reason_for_deduction'></span>
+                </button>
+            </div>
+        </div>
+        <div id="tailc-change-language-print" hidden>
+            <div class="form-group">
+                <select onchange="render_language(this.value)" class="change-language-print form-control"
+                    name="language-print">
+                    <option value="0">Tiếng Việt</option>
+                    <option value="1">English</option>
+                </select>
+            </div>
+        </div>
+        <div id="tailc-option_print" hidden>
+            <div class="form-group">
+                <select style="width: 100%;" id="select-option-print" name="select-option-print[]" multiple="multiple">
+                    <option class='language_class' value="0"></option>
+                    <option class='language_lessons_number' value="1"></option>
+                    <option class='language_start_date' value="2"></option>
+                    <option class='language_end_date' value="3"></option>
+                    <option class='language_course_promotion' value="4"></option>
+                    <option class='language_invoice_promotion' value="5"></option>
+                    <option class='language_bill_item' value="6"></option>
+                    <option class='language_parent_info' value="7"></option>
+                    <option class='language_appointment' value="8"></option>
+                    <option class='language_promotion' value="9"></option>
+                    <option class='language_debit' value="10"></option>
+                    <option class='language_discount_contract' value="11"></option>
+                    <option class='language_receivables' value="12"></option>
+                </select>
+            </div>
+        </div>
+
+        <div id="tailc-setup-print" hidden>
+            <select style="width: 100%;" id="select-setup-print" name="select-print[]" multiple="multiple">
+                <option class='language_accountant' value="0"></option>
+                <option class='language_cashier' value="1"></option>
+                <option class='language_manage' value="2"></option>
+                <option class='language_garenal_director' value="3"></option>
+            </select>
+        </div>
     </div>
 
-    <div id="content">
-        <div class="container center">
-            <img src="img/Image_001.png" alt="Image 1" class="center-image">
-            <img id="qrcode" class="qrcode" alt="QR Code">
-        </div>
-        <div class="center">
-            <h6 class="bold" style="color: #0e9447;">MEDIC HOAN MY SAI GON CLINIC
-            </h6>
-            <h6 class="center">588 Ha Huy Giap Street - Thanh Loc,</h6>
-            <h6 class="center">District 12, Ho Chi Minh City.</h6>
-            <h3 class="bold " style="color: #e083af;">PHIẾU KHÁM SỨC KHỎE TỔNG QUÁT</h3>
-        </div>
-        <br>
-        <div class="highlighted-section ">
 
-            <p> &emsp;Họ và tên/ Patient Name: <span id="f"></span>
-                &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
-                Giới tính/Gender:
-            </p>
-            <p> &emsp;Năm sinh/Age–YOB: <span id="f"></span>
-                &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
-                SĐT:
-            </p>
-            <p> &emsp;Địa chỉ/ Address: <span id="f"></span>
-            </p>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 
-        </div>
-        <br>
-        <div class=" center">
-            <img src="img/Image_003.jpg" alt="Image 1">
-        </div>
-        <br>
-        <h4 class="center bold" style="color: #e083af;">GÓI KHÁM TÀI TRỢ 100%</h4>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
 
-        <table class="table1">
-            <thead>
-                <tr>
-                    <th style="width: 40%;">Danh mục</th>
-                    <th style="width: 20%;"> Chi phí</th>
-                    <th style="width: 40%;">Ghi Chú</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>A. Kiểm tra huyết áp</td>
-                    <td>10.000</td>
-                    <td>Phát hiện các bệnh lí về huyết áp</td>
-                </tr>
-                <tr>
-                    <td>B. Bác sĩ tư vấn sức khỏe<br>Khám tổng quát</td>
-                    <td>150.000</td>
-                    <td>Khám và tư vấn các bệnh lí về Tim, Phổi, bệnh đường hô hấp, tiêu hóa, thần kinh, nội tiết, cơ
-                        xương khớp,...</td>
-                </tr>
-                <tr>
-                    <td>C. Cận lâm sàng:</td>
-                    <td>450.000</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td colspan="3">I. Xét nghiệm máu:</td>
-                </tr>
-                <tr>
-                    <td>1. Tầm soát đái tháo đường</td>
-                    <td></td>
-                    <td>Định lượng đường huyết</td>
-                </tr>
-                <tr>
-                    <td>2. Tầm soát ung thư Gan</td>
-                    <td></td>
-                    <td>AFP</td>
-                </tr>
-                <tr>
-                    <td colspan="3">II. Tầm soát bệnh lí đường tiết niệu, bệnh thận, tiểu đường, ...</td>
-                </tr>
-                <tr>
-                    <td colspan="3">Xét nghiệm 10 thông số (TS) trong nước tiểu:</td>
-                </tr>
-                <tr>
-                    <td>1. Tỷ trọng nước tiểu</td>
-                    <td>SG</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>2. Tế bào bạch cầu</td>
-                    <td>LEU</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>3. Hợp chất sinh ra do vi khuẩn</td>
-                    <td>NIT</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>4. Độ acid của nước tiểu</td>
-                    <td>pH</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>5. Hồng cầu niệu</td>
-                    <td>BLD</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>6. Protein niệu</td>
-                    <td>PRO</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>7. Đường trong nước tiểu</td>
-                    <td>GLU</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>8. Cặn nước tiểu</td>
-                    <td>ASC</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>9. Keton</td>
-                    <td>KET</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>10. UBG</td>
-                    <td>Urobilinogen</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>D. Soi mao mạch</td>
-                    <td>300.000</td>
-                    <td>Tầm soát nguy cơ đột quỵ</td>
-                </tr>
-                <tr>
-                    <td>E. Soi da</td>
-                    <td>150.000</td>
-                    <td>Khám da liễu</td>
-                </tr>
-                <tr>
-                    <td>F. Khám mắt</td>
-                    <td>100.000</td>
-                    <td></td>
-                </tr>
-            </tbody>
-        </table>
-        <br>
-        <p class="bold">GHI CHÚ:</p>
-        <p>
-        <nav>- Trước khi lấy máu xét nghiệm vui lòng không ăn sáng hoặc uống coffee, nước ngọt.</nav>
-        <nav>- Ngoài các danh mục khám miễn phí trên, Phòng khám chúng tôi sẽ hỗ trợ thực hiện thêm các
-            danh mục khám theo yêu cầu của khách hàng với mức phí ưu đãi.</nav>
-        <nav>- Kết quả xét nghiệm sẽ trả theo nhóm: 3-5 ngày sau khi khám.</nav>
-        </p>
-    </div>
-    <h1>Bảng Xét Nghiệm</h1>
-    <table  class="table1">
-        <tr >
-            <th style="text-align: center;">STT</th>
-            <th>DANH MỤC</th>
-            <th>Ý NGHĨA THỰC HIỆN</th>
-            <th>ĐƠN GIÁ</th>
-            <th>GIÁ ƯU ĐÃI</th>
-        </tr>
-        <tr>
-            <td>1</td>
-            <td>Máu - Tổng phân tích tế bào</td>
-            <td>Tâm soát các bệnh về máu: thiếu máu, ung thư máu, suy tủy, nhiễm trùng, nhiễm khuẩn,...</td>
-            <td>125,000</td>
-            <td>100,000</td>
-        </tr>
-        <tr>
-            <td>2</td>
-            <td>Nhóm máu ABO/Rh</td>
-            <td>Xác định nhóm máu: A, B, AB, O/Rh+, Rh-</td>
-            <td>120,000</td>
-            <td>90,000</td>
-        </tr>
-        <tr>
-            <td>3</td>
-            <td>HbA1C</td>
-            <td>Đường huyết trung bình 3 tháng</td>
-            <td>175,000</td>
-            <td>140,000</td>
-        </tr>
-        <tr>
-            <td>4</td>
-            <td>Glucose</td>
-            <td>Định lượng đường huyết</td>
-            <td>55,000</td>
-            <td>40,000</td>
-        </tr>
-        <tr>
-            <td>5</td>
-            <td>SGOT-SGPT-GGT</td>
-            <td>Định lượng men gan, đánh giá tổn thương gan.</td>
-            <td>150,000</td>
-            <td>120,000</td>
-        </tr>
-        <tr>
-            <td>6</td>
-            <td>Ure - Creatinine - eGFR</td>
-            <td>Đánh giá bất thường chức năng thận</td>
-            <td>120,000</td>
-            <td>90,000</td>
-        </tr>
-        <tr>
-            <td>7</td>
-            <td>Acid uric</td>
-            <td>Phát hiện sớm bệnh Gout</td>
-            <td>75,000</td>
-            <td>60,000</td>
-        </tr>
-        <tr>
-            <td>8</td>
-            <td>Cholesterol TP</td>
-            <td>Đánh giá nguy cơ các bệnh về mỡ máu, tím, mạch, tăng huyết áp, tầm soát nguy cơ tai biến, đột quỵ. ...
-            </td>
-            <td>150,000</td>
-            <td>120,000</td>
-        </tr>
-        <tr>
-            <td>9</td>
-            <td>Iron/Sắt huyết thanh</td>
-            <td>Đo lượng sắt trong máu, thiếu sắt hoặc thừa sắt</td>
-            <td>50,000</td>
-            <td>40,000</td>
-        </tr>
-        <tr>
-            <td>10</td>
-            <td>Ferritin</td>
-            <td>Đo tổng lượng sắt dự trữ, kết hợp chẩn đoán.</td>
-            <td>150,000</td>
-            <td>120,000</td>
-        </tr>
-        <tr>
-            <td>11</td>
-            <td>Điện giải (Na, K, Ca, CI)</td>
-            <td>Xác định tình trạng các chất điện giải</td>
-            <td>150,000</td>
-            <td>120,000</td>
-        </tr>
-    </table>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/printThis/1.15.0/printThis.min.js"
+        integrity="sha512-d5Jr3NflEZmFDdFHZtxeJtBzk0eB+kkRXWFQqEc1EKmolXjHm2IKCA7kTvXBNjIYzjXfD5XzIjaaErpkZHCkBg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdn.centeronline.edu.vn/js/customer.js" type="text/javascript"></script>
+
     <script>
-        // Đoạn ID bạn muốn mã hóa thành mã QR
+        // Function to get URL parameters
+        function getUrlParameter(name) {
+            name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+            var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+            var results = regex.exec(location.search);
+            return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+        }
         var id = "W003067301001941";
 
         // Sử dụng QuickChart API để tạo QR code
@@ -399,8 +739,591 @@
 
         // Gán URL của QR code vào thẻ img
         document.getElementById('qrcode').src = qrCodeUrl;
+        // Get parameters from URL
+        var namehs = getUrlParameter('namehs');
+        var ngaythanhtoan = getUrlParameter('ngaythanhtoan');
+        var phuongthuctt = getUrlParameter('phuongthuctt');
+        var year = getUrlParameter('year');
+        var month = getUrlParameter('month');
+        var chinhanh = getUrlParameter('chinhanh');
+        var masp = getUrlParameter('masp');
+        var dongia = getUrlParameter('dongia');
+        var discount = getUrlParameter('discount');
+        var amount = getUrlParameter('amount');
+        var name = getUrlParameter('name');
+        // Display parameters on the page
+        document.getElementById('namehs').textContent = namehs;
+        document.getElementById('ngaythanhtoan').textContent = ngaythanhtoan;
+        document.getElementById('phuongthuctt').textContent = phuongthuctt;
+        document.getElementById('year').textContent = year;
+        document.getElementById('month').textContent = month;
+        document.getElementById('chinhanh').textContent = chinhanh;
+        document.getElementById('masp').textContent = masp;
+        document.getElementById('dongia').textContent = dongia;
+
+        document.getElementById('discount').textContent = discount;
+
+        document.getElementById('amount').textContent = amount;
+        document.getElementById('totalamount').textContent = amount;
+        document.getElementById('name').textContent = name;
+
+
+        // tùy chọn ẩn các thông số của in
+        var option_print_class = "1";
+        var option_print_session = "1";
+        var option_print_start = "1";
+        var option_print_end = "1";
+        var option_print_course = "1";
+        var option_print_invoice = "1";
+        var option_print_bill_item = "1";
+        var option_print_parent_info = "1";
+        var option_print_appointment = "1";
+        var option_print_promotion = "1";
+        var option_print_debit = "1";
+        var option_print_discount_contract = "1";
+        var option_print_receivables = "1";
+
+
+        // tùy chọn hiển thị người ký
+        var option_print_accountant = "0";
+        var option_print_cashier = "0";
+        var option_print_manage = "0";
+        var option_print_garenal_director = "0";
+
+
+        var english_print = {
+            tenphieu: 'TUITION INVOICE',
+            year: 'Year',
+            month: 'Month',
+            chinhanh: 'Branch',
+            address: 'Address',
+            banks: 'Bank Account',
+            tel: 'Tel',
+            tax: 'Tax Code',
+            pay: 'Payment Method',
+            receipt_voucher: 'Receipt Voucher',
+            receipt_id: 'Receipt ID',
+            receipt_date: 'Receipt Date',
+            student: 'Student Name',
+            student_id: 'Student ID',
+            birthday: 'Birthday',
+            parent: 'Parent',
+            amount_paid: 'Amount',
+            phone_number: 'Phone Number',
+            stt: 'NO',
+            namepro: 'Name of Goods and services',
+            unit: 'Unit',
+            invoice_id: 'Invoice ID',
+            class: 'Class',
+            lessons_number: 'Lessons Number',
+            start_date: 'Start Date',
+            end_date: 'End Date',
+            total_fee: 'Unit Price',
+            course_promotion: 'Course Promotion',
+            invoice_promotion: 'Invoice Promotion',
+            accumulate_promotion: 'Accumulate Promotion',
+            already_paid: 'Already Paid',
+            outstanding: 'Outstanding',
+            add_ons: ' Add-ons',
+            quantity: 'Quantity',
+            promotion: 'Discount',
+            payment_appointment: 'Payment Appointment',
+            appointment: 'Appointment',
+            date: 'Date',
+            amount: 'Amount',
+            promotion_program: 'Promotion Program',
+            note: 'Notes',
+            payer: 'Payer',
+            signature: 'Signature',
+            full_name: 'Full name',
+            collector: 'Collector',
+            accountant: 'Accountant',
+            garenal_director: 'Director',
+            total_amount_paid: 'Total Amount Paid',
+            payment_method: 'Payment Method',
+            cash: 'Cash',
+            bank_tranfer: 'Bank Tranfer',
+            credit_card: 'Credit Card',
+            co_wallet: 'CO Wallet',
+            vnpay: 'VNPAY',
+            bill: 'Bill',
+            receipt: 'Receipt',
+            and_bonus: 'and bonus',
+            total_amount_in_words: 'Total amount in words',
+            reason_for_deduction: 'Reason for deduction',
+            enter_reason_for_deduction: 'Enter reason for deduction',
+            paid: 'Paid',
+            unpaid: 'Unpaid',
+            cashier: 'Cashier',
+            manage: 'Manager',
+            select_an_option: 'Select an option',
+            bill_item: 'Bill item',
+            parent_info: 'Parent info',
+            debit: 'Debit',
+            landscape: 'Landscape',
+            portrait: 'Portrait',
+            split: 'Split',
+            show_user: 'Show user',
+            print: 'Print',
+            close: 'Close',
+            discount_contract: 'Discount of contract',
+            receivables: 'Receivables'
+        };
+        var tieng_viet = {
+            tenphieu: 'HÓA ĐƠN THANH TOÁN',
+            address: 'Địa chỉ',
+            banks: 'Số Tài Khoản',
+            year: 'Năm',
+            month: 'Tháng / Đợt',
+            chinhanh: 'Chi Nhánh',
+            tel: 'Điện Thoại',
+            tax: 'Mã số Thuế',
+            pay: 'Phương Thức Thanh Toán',
+            receipt_voucher: 'HÓA ĐƠN THU TIỀN',
+            receipt_id: 'Mã HĐ',
+            stt: 'STT',
+            namepro: 'Tên Hàng Hóa / Dịch Vụ',
+            receipt_date: 'Ngày thanh toán',
+            student: 'Tên Học Sinh',
+            student_id: 'Mã học viên',
+            birthday: 'Ngày sinh',
+            parent: 'Phụ huynh',
+            amount_paid: 'Thành tiền',
+            phone_number: 'SĐT',
+            unit: 'Đơn vị',
+            invoice_id: 'Khóa học',
+            class: 'Lớp học',
+            lessons_number: 'Số buổi',
+            start_date: 'Bắt đầu',
+            end_date: "Kết thúc",
+            total_fee: 'Đơn Giá',
+            course_promotion: 'ƯĐKH',
+            invoice_promotion: 'ƯĐHĐ',
+            accumulate_promotion: 'ƯĐTĐ',
+            already_paid: 'Trả trước',
+            outstanding: 'Còn nợ',
+            add_ons: 'Vật phẩm/Khoản thu',
+            quantity: 'Số lượng',
+            promotion: 'Giảm Giá',
+            payment_appointment: 'Lịch hẹn đóng tiền',
+            appointment: 'Lịch hẹn',
+            date: 'Ngày hẹn',
+            amount: 'Số tiền',
+            promotion_program: 'Chương trình ưu đãi',
+            note: 'Ghi chú',
+            payer: 'Người nộp',
+            signature: 'Ký',
+            full_name: 'ghi rõ họ tên',
+            collector: 'Người lập phiếu',
+            accountant: 'Kế toán',
+            manage: 'Quản lý',
+            cashier: 'Thủ quỹ',
+            garenal_director: 'Giám đốc',
+            total_amount_paid: 'Tổng tiền thanh toán',
+            payment_method: 'Hình thức thanh toán',
+            cash: 'Tiền mặt',
+            bank_tranfer: 'Chuyển khoản ngân hàng',
+            credit_card: 'Thanh toán qua thẻ',
+            co_wallet: 'Ví tiền CO',
+            vnpay: 'Thanh toán bằng vnpay',
+            bill: 'Hóa đơn',
+            receipt: 'Hợp đồng',
+            and_bonus: 'và tặng',
+            total_amount_in_words: 'Bằng chữ',
+            reason_for_deduction: 'Ghi chú',
+            enter_reason_for_deduction: 'Nhập lý do giảm trừ',
+            paid: 'Đã trả',
+            unpaid: 'Chưa trả',
+            select_an_option: 'Chọn hiển thị',
+            bill_item: 'Thu thêm',
+            parent_info: 'Phụ huynh',
+            debit: 'Còn nợ',
+            landscape: 'Khổ ngang',
+            portrait: 'Khổ dọc',
+            split: 'Chia đôi',
+            show_user: 'Hiển thị tên người lập phiếu',
+            print: 'In',
+            close: 'Đóng',
+            discount_contract: 'GGTT',
+            receivables: 'Tổng phải thu'
+            // discount_contract: 'Giảm trực tiếp',
+        }
+        var list_value_select2 = [];
+
+
+        render_language();
+
+        function initPrint() {
+            $('#select-setup-print').select2({
+                placeholder: 'Tùy chọn ký'
+            });
+            $('#select-option-print').select2({
+                placeholder: 'Tùy chọn ẩn'
+            });
+            $('#select-setup-print').on('select2:select', function (e) {
+                list_value_select2.push(e.params.data.id)
+                var value_select = $('#select-setup-print').val();
+                list_select = value_select;
+                if (value_select.length == 3) {
+                    $('#select-setup-print').val([list_value_select2[list_value_select2.length - 2], list_value_select2[list_value_select2.length - 1]]).trigger('change');
+                    $('#show_signature').find('.center').removeAttr('class').addClass('text-center col-3');
+                }
+                if (value_select.length == 2) {
+                    $('#setup-print').addClass('heigth-90px');
+                    $('#show_signature').find('.text-center').removeAttr('class').addClass('text-center col-3');
+                }
+                if (value_select.length == 1) {
+                    $('#setup-print').removeClass('heigth-90px');
+                    $('#show_signature').find('.text-center').removeAttr('class').addClass('text-center col-4');
+                }
+                if (value_select.length == 0) {
+                    $('#show_signature').find('.text-center').removeAttr('class').addClass('text-center col-6');
+                }
+            });
+            $('#select-setup-print').change(function (e) {
+                var value_select = $('#select-setup-print').val();
+                if (value_select.length == 1) {
+                    $('#setup-print').removeClass('heigth-90px');
+                }
+                if (value_select.indexOf('0') != -1) {
+                    $('#select-accountant').show();
+                    option_print_accountant = 1;
+                } else {
+                    $('#select-accountant').hide();
+                    option_print_accountant = 0;
+                }
+                if (value_select.indexOf('1') != -1) {
+                    $('#select-cashier').show();
+                    option_print_cashier = 1;
+                } else {
+                    $('#select-cashier').hide();
+                    option_print_cashier = 0;
+                }
+                if (value_select.indexOf('2') != -1) {
+                    $('#select-manage').show();
+                    option_print_manage = 1;
+                } else {
+                    $('#select-manage').hide();
+                    option_print_manage = 0;
+                }
+                if (value_select.indexOf('3') != -1) {
+                    $('#select-garenal-director').show();
+                    option_print_garenal_director = 1;
+                } else {
+                    $('#select-garenal-director').hide();
+                    option_print_garenal_director = 0;
+                }
+                if ($('#select-setup-print').val().length == 2) {
+                    $('#setup-print').addClass('heigth-90px');
+                    $('#show_signature').find('.text-center').removeAttr('class').addClass('text-center col-3');
+                }
+                if ($('#select-setup-print').val().length == 1) {
+                    $('#setup-print').removeClass('heigth-90px');
+                    $('#show_signature').find('.text-center').removeAttr('class').addClass('text-center col-4');
+                }
+                if ($('#select-setup-print').val().length == 0) {
+                    $('#show_signature').find('.text-center').removeAttr('class').addClass('text-center col-6');
+                }
+            })
+            $('#select-accountant').hide();
+            $('#select-cashier').hide();
+            $('#select-manage').hide();
+            $('#select-garenal-director').hide();
+            payment_type_render();
+            $('#reason-view').hide();
+            var option_print = [];
+            if (option_print_class == "0") {
+                option_print.push('0');
+            }
+            if (option_print_session == "0") {
+                option_print.push('1');
+            }
+            if (option_print_start == "0") {
+                option_print.push('2');
+            }
+            if (option_print_end == "0") {
+                option_print.push('3');
+            }
+            if (option_print_course == "0") {
+                option_print.push('4');
+            }
+            if (option_print_invoice == "0") {
+                option_print.push('5');
+            }
+            if (option_print_bill_item == "0") {
+                option_print.push('6');
+            }
+            if (option_print_parent_info == "0") {
+                option_print.push('7');
+            }
+            if (option_print_appointment == "0") {
+                option_print.push('8');
+            }
+            if (option_print_promotion == "0") {
+                option_print.push('9');
+            }
+            if (option_print_debit == "0") {
+                option_print.push('10');
+            }
+            if (option_print_discount_contract == "0") {
+                option_print.push('11');
+            }
+            if (option_print_receivables == "0") {
+                option_print.push('12');
+            }
+            option_show();
+        }
+
+        initPrint();
+        $('#select-setup-print').trigger('change');
+
+
+        $('#select-option-print').change(function (e) {
+            option_show();
+        });
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
+        function set_cache_option_show() {
+
+        }
+
+        function option_show() {
+            var list_option = $('#select-option-print').val();
+            if (list_option.indexOf('0') != -1) {
+                option_print_class = 0;
+                $('.option_print_class').hide();
+            } else {
+                option_print_class = 1;
+                $('.option_print_class').show();
+            }
+            if (list_option.indexOf('1') != -1) {
+                option_print_session = 0;
+                $('.option_print_lessons_number').hide();
+            } else {
+                option_print_session = 1;
+                $('.option_print_lessons_number').show();
+            }
+            if (list_option.indexOf('2') != -1) {
+                option_print_start = 0;
+                $('.option_print_start_date').hide();
+            } else {
+                option_print_start = 1;
+                $('.option_print_start_date').show();
+            }
+            if (list_option.indexOf('3') != -1) {
+                option_print_end = 0;
+                $('.option_print_end_date').hide();
+            } else {
+                option_print_end = 1;
+                $('.option_print_end_date').show();
+            }
+            if (list_option.indexOf('4') != -1) {
+                option_print_course = 0;
+                $('.option_print_course_promotion').hide();
+                $('.comma').hide();
+            } else {
+                option_print_course = 1;
+                $('.option_print_course_promotion').show();
+            }
+            if (list_option.indexOf('5') != -1) {
+                option_print_invoice = 0;
+                $('.option_print_invoice_promotion').hide();
+                $('.comma').hide();
+            } else {
+                option_print_invoice = 1;
+                $('.option_print_invoice_promotion').show();
+            }
+            if (list_option.indexOf('6') != -1) {
+                option_print_bill_item = 0;
+                $('.option_print_bill_item').hide();
+            } else {
+                option_print_bill_item = 1;
+                $('.option_print_bill_item').show();
+            }
+            if (list_option.indexOf('7') != -1) {
+                option_print_parent_info = 0;
+                $('.option_print_parent_info').hide();
+            } else {
+                option_print_parent_info = 1;
+                $('.option_print_parent_info').show();
+            }
+            if (list_option.indexOf('8') != -1) {
+                option_print_appointment = 0;
+                $('.option_print_appointment').hide();
+            } else {
+                option_print_appointment = 1;
+                $('.option_print_appointment').show();
+            }
+            if (list_option.indexOf('9') != -1) {
+                option_print_promotion = 0;
+                $('.option_print_promotion').hide();
+            } else {
+                option_print_promotion = 1;
+                $('.option_print_promotion').show();
+            }
+            if (list_option.indexOf('10') != -1) {
+                option_print_debit = 0;
+                $('.option_print_debit').hide();
+            } else {
+                option_print_debit = 1;
+                $('.option_print_debit').show();
+            }
+            if (list_option.indexOf('11') != -1) {
+                option_print_debit = 0;
+                $('.option_print_discount_contract').hide();
+            } else {
+                option_print_debit = 1;
+                $('.option_print_discount_contract').show();
+            }
+            if (list_option.indexOf('12') != -1) {
+                option_print_receivables = 0;
+                $('.option_print_receivables').hide();
+            } else {
+                option_print_receivables = 1;
+                $('.option_print_receivables').show();
+            }
+
+            if ((list_option.indexOf('4') == -1) && list_option.indexOf('5') == -1) {
+                $('.comma').show();
+            }
+            if ((list_option.indexOf('4') != -1) && list_option.indexOf('5') != -1) {
+                $('.dot').hide();
+            } else {
+                $('.dot').show();
+            }
+
+
+        }
+
+
+        function render_language() {
+            var valueSelected = $('.change-language-print option:selected').val();
+            var chuoi = amount;
+            // Bỏ dấu phẩy
+            chuoi = chuoi.replace(/,/g, '');
+            // Bỏ dấu chấm
+            chuoi = chuoi.replace(/\./g, '');
+            if (valueSelected == 0) { // vi
+                $.each(tieng_viet, function (k, w) {
+                    var name_class = '.language_' + k;
+                    $(name_class).text(w);
+                });
+                $('.text-more').show();
+                $(".money_word").html(DocSo3ChuSo(chuoi));
+                payment_type_render(0);
+            } else { //en
+                $.each(english_print, function (k, w) {
+                    var name_class = '.language_' + k;
+                    $(name_class).text(w);
+                })
+                $('.text-more').hide();
+                $(".money_word").html(numbers_to_words(chuoi));
+                payment_type_render(1);
+            }
+        }
+
+        function print() {
+            set_cache_option_show();
+            $('#content').printThis({
+                debug: false, // show the iframe for debugging
+                importCSS: true, // import parent page css
+                importStyle: true, // import style tags
+                printContainer: true, // print outer container/$.selector
+                // loadCSS: ["assets/vendors/base/vendors.bundle.css", ""], // path to additional css file - use an array [] for multiple
+                pageTitle: "", // add title to print page
+                removeInline: false, // remove inline styles from print elements
+                removeInlineSelector: "*", // custom selectors to filter inline styles. removeInline must be true
+                printDelay: 333, // variable print delay
+                header: null, // prefix to html
+                footer: null, // postfix to html
+                base: false, // preserve the BASE tag or accept a string for the URL
+                formValues: true, // preserve input/form values
+                canvas: false, // copy canvas content
+                removeScripts: false, // remove script tags from print content
+                copyTagClasses: false, // copy classes from the html & body tag
+                beforePrintEvent: null, // function for printEvent in iframe
+                beforePrint: null, // function called before iframe is filled
+                afterPrint: null // function called before iframe is removed
+            });
+        }
+
+        $('input[name=layout]').on('change', function () {
+            $('#page').attr('size', $(this).attr('data-size')).attr('layout', $(this).attr('data-layout'));
+
+            if ($('#a4-split').prop('checked')) {
+                var html = '<hr class="height_hr"><div id="content-split">' + $('#content').find('.content_page1').html() + '</div>';
+                $('#content').find('.content_page1:first').addClass('height_split');
+                $('#content').append(html);
+            } else {
+                $('#content-split').remove();
+                $('hr[class=height_hr]').remove();
+            }
+        });
+
+        function toggleUser() {
+            console.log($('#show-user').prop('checked'));
+            if ($('#show-user').prop('checked')) {
+                $('#creator').css('display', 'block');
+            } else {
+                $('#creator').css('display', 'none');
+            }
+        }
+
+        function showReasonModal() {
+            $('#modal-reason').modal('show');
+        }
+
+        function applyReason() {
+            let content = $('#reason-content').val();
+            if (content != '') {
+                $('.text_reason').text(content);
+                $('#reason-view').show();
+                /* $('#reason-view').html("<strong><span class='language_reason_for_deduction'></span>:</strong> " + content); */
+            } else {
+                $('#reason-view').hide();
+            }
+            $('#modal-reason').modal('hide');
+        }
+
+        function payment_type_render(language_id) {
+            var string_payment_type = '[3]';
+            var length_payment = JSON.parse(string_payment_type).length;
+            var arr_paeyment_vi = '{"1":"Thanh to\u00e1n b\u1eb3ng v\u00ed CO","2":"Thanh to\u00e1n b\u1eb1ng ti\u1ec1n m\u1eb7t","3":"Thanh to\u00e1n b\u1eb1ng chuy\u1ec3n kho\u1ea3n","4":"Thanh to\u00e1n b\u1eb1ng qu\u1eb9t th\u1ebb","5":"Thanh to\u00e0n b\u1eb1ng vimass","6":"Thanh to\u00e1n b\u1eb1ng VNPAY","7":"Thanh to\u00e1n b\u1eb1ng 9PAY","8":"Thanh to\u00e1n b\u1eb1ng ONEPAY"}';
+            var arr_paeyment_en = '{"1":"CO Wallet","2":"Cash","3":"Bank Tranfer","4":"Credit Card","5":"Vimass","6":"VNPAY","7":"9PAY","8":"OnePAY"}';
+            string_payment_type = String(string_payment_type);
+            var text_payment = '';
+            var check = 1;
+            if (language_id == 1) { // en
+                $.each(JSON.parse(arr_paeyment_en), function (k, v) {
+                    if (string_payment_type.indexOf(k) !== -1) {
+                        if (check !== length_payment) {
+                            text_payment += v + ' ,';
+                        } else {
+                            text_payment += v;
+                        }
+                        check += 1;
+                    }
+                })
+            } else { // vi
+                $.each(JSON.parse(arr_paeyment_vi), function (k, v) {
+                    if (string_payment_type.indexOf(k) !== -1) {
+                        if (check !== length_payment) {
+                            text_payment += v + ' ,';
+                        } else {
+                            text_payment += v;
+                        }
+                        check += 1;
+                    }
+                })
+            }
+            $('#payment_method').text(text_payment);
+
+
+        }
     </script>
-
 </body>
-
-</html>
