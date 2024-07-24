@@ -14,28 +14,25 @@
             background-color: #f8f9fa;
         }
 
-        .container {
-            max-width: 1200px;
+        .container1 {
             margin: 0 auto;
             padding: 20px;
         }
 
         .filters {
-            background-color: white;
-            border-radius: 8px;
-            padding: 20px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
             margin-bottom: 20px;
         }
 
         .filter-group {
-            margin-bottom: 15px;
+            margin-bottom: 0;
         }
 
-        .filter-group h3 {
-            font-size: 1.1rem;
-            margin-bottom: 10px;
-            color: #333;
+        .filter-container {
+            display: flex;
+            align-items: flex-end;
         }
 
         .select2-container {
@@ -54,17 +51,27 @@
             padding: 15px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             transition: transform 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .search-bar input,
+        .filter-group select,
+        .select2-container .select2-selection--multiple {
+            height: 38px;
+            border-radius: 10px;
+            padding-bottom: 8px;
         }
 
         .product-card:hover {
             transform: translateY(-5px);
         }
 
-        .product-card img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 4px;
-            margin-bottom: 10px;
+        .product-card .product-details {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
         }
 
         .product-card h3 {
@@ -77,6 +84,10 @@
             font-size: 0.9rem;
             color: #666;
             margin-bottom: 5px;
+        }
+
+        .product-card .btn {
+            margin-top: auto;
         }
 
         #cart {
@@ -92,7 +103,8 @@
 
         #cartIcon {
             position: fixed;
-            top: 20px;
+            top: 90%;
+
             right: 20px;
             background-color: white;
             border-radius: 50%;
@@ -147,6 +159,13 @@
             z-index: 9999;
         }
 
+        .search-bar input,
+        .filter-group select,
+        .select2-container .select2-selection--multiple {
+            height: 38px;
+            border-radius: 10px;
+        }
+
         .spinner {
             width: 50px;
             height: 50px;
@@ -176,6 +195,10 @@
                 margin-top: 20px;
                 max-width: 100%;
             }
+
+            .row.mb-4>div {
+                margin-bottom: 15px;
+            }
         }
     </style>
 </head>
@@ -184,32 +207,50 @@
     <div id="loading">
         <div class="spinner"></div>
     </div>
+
+
     <div class="container">
         <h1 class="text-center mb-4">Danh sách sản phẩm</h1>
-        <div class="row">
-            <div class="col-md-4 mb-4">
+        <div class="row mb-4">
+            <div class="col-12">
                 <div class="filters">
-                    <div class="filter-group">
-                        <h3>Tìm kiếm</h3>
-                        <input type="text" id="searchInput" class="form-control" placeholder="Tìm kiếm sản phẩm...">
-                    </div>
-
-                    <div class="filter-group">
-                        <h3>Màu sắc</h3>
-                        <select id="colorFilters" multiple="multiple" class="form-control"></select>
-                    </div>
-
-                    <div class="filter-group">
-                        <h3>Nhóm hàng hóa</h3>
-                        <select id="categoryFilters" multiple="multiple" class="form-control"></select>
+                    <div class="row filter-container">
+                        <div class="col-md-6">
+                            <div class="search-bar">
+                                <input type="text" id="searchInput" class="form-control"
+                                    placeholder="Tìm kiếm sản phẩm...">
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="filter-group">
+                                <select id="colorFilters" multiple="multiple" class="form-control"></select>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="filter-group">
+                                <select id="categoryFilters" multiple="multiple" class="form-control"></select>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-8">
+        </div>
+
+        <div class="row">
+            <div class="col-12">
                 <div id="productList" class="product-grid"></div>
             </div>
         </div>
     </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div id="productList" class="product-grid"></div>
+        </div>
+    </div>
+
+
+
     <div id="cartIcon" onclick="openCartModal()">
         <i class="fas fa-shopping-cart"></i>
         <span class="badge bg-danger"></span>
@@ -232,7 +273,6 @@
             </div>
         </div>
     </div>
-    <!-- Modal for product dimensions -->
     <div class="modal fade" id="dimensionsModal" tabindex="-1" aria-labelledby="dimensionsModalLabel"
         aria-hidden="true">
         <div class="modal-dialog">
@@ -251,7 +291,6 @@
             </div>
         </div>
     </div>
-
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
@@ -262,6 +301,7 @@
             colors: [],
             categories: []
         };
+        let currentEditingIndex = -1;
         let cart = JSON.parse(localStorage.getItem('cart')) || [];
         let currentEditingProduct = null;
         function showLoading() {
@@ -272,50 +312,82 @@
             document.getElementById('loading').style.display = 'none';
         }
         async function fetchProducts() {
-            showLoading(); // Hiển thị loading trước khi gọi API
+            showLoading();
             try {
                 const response = await fetch(API_URL);
                 const data = await response.json();
-                allProducts = data.products;
-                displayProducts(allProducts);
-                populateFilters();
-                updateCartIcon();
+                console.log("Data received:", data);
+
+                if (data.products && typeof data.products === 'object') {
+                    allProducts = data.products;
+                    displayProducts(allProducts);
+                    populateFilters();
+                    updateCartIcon();
+                } else {
+                    console.error("Unexpected data structure:", data);
+                    allProducts = {};
+                    displayProducts({});
+                }
             } catch (error) {
                 console.error('Error fetching products:', error);
-                // Có thể thêm thông báo lỗi cho người dùng ở đây
             } finally {
-                hideLoading(); // Ẩn loading sau khi xử lý xong, dù thành công hay thất bại
+                hideLoading();
             }
         }
-
         function displayProducts(products) {
             const productList = document.getElementById('productList');
             productList.innerHTML = '';
-            let hasProducts = false;
-            for (const maHangHoa in products) {
-                products[maHangHoa].forEach(product => {
-                    const productCard = document.createElement('div');
-                    productCard.className = 'product-card';
 
-                    productCard.innerHTML = `
+            if (Object.keys(products).length === 0) {
+                productList.innerHTML = '<p>Không có sản phẩm nào để hiển thị.</p>';
+                return;
+            }
+
+            for (const maHangHoa in products) {
+                if (Array.isArray(products[maHangHoa])) {
+                    products[maHangHoa].forEach(product => {
+                        const productCard = document.createElement('div');
+                        productCard.className = 'product-card';
+
+                        let dimensionsHtml = getDimensionsHtml(product);
+
+                        productCard.innerHTML = `
+                    <div class="product-image-container">
                         <img src="${product.hinhAnh || ''}" alt="${product.tenHangHoa || ''}">
+                    </div>
+                    <div class="product-details">
                         <h3>${product.tenHangHoa || 'Không có tên'}</h3>
                         <p><strong>Màu:</strong> ${product.mau || 'Không xác định'}</p>
                         <p><strong>Nhóm:</strong> ${product.nhomHangHoa || 'Không xác định'}</p>
                         <p><strong>Đơn giá:</strong> ${product.donGia ? product.donGia.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }) : 'Không xác định'}</p>
+                        <p><strong>Kích thước:</strong> ${dimensionsHtml}</p>
                         <p><strong>Mô tả:</strong> ${product.moTa || 'Không có mô tả'}</p>
-                        <button onclick="addToCart(${JSON.stringify(product).replace(/"/g, '&quot;')})" class="btn btn-primary">Thêm vào giỏ hàng</button>
-                    `;
-                    hasProducts = true;
-                    productList.appendChild(productCard);
-                });
-            }
+                        <button onclick="addToCart('${maHangHoa}', ${product.id})" class="btn btn-primary">Thêm vào giỏ hàng</button>
+                    </div>
+                `;
 
-            if (!hasProducts) {
-                productList.innerHTML = '<p>Không có sản phẩm nào.</p>';
+                        productList.appendChild(productCard);
+                    });
+                }
             }
+        }
 
-            hideLoading();
+        function getDimensionsHtml(product) {
+            if (product.tenHangHoa.includes('Chữ U')) {
+                return `
+            Dài (P/T/G): ${product.DAI_PHAI || 0}/${product.DAI_TRAI || 0}/${product.DAI_GIUA || 0}<br>
+            Cao (P/T/G): ${product.CAO_PHAI || 0}/${product.CAO_TRAI || 0}/${product.CAO_GIUA || 0}<br>
+            Sâu (P/T/G): ${product.SAU_PHAI || 0}/${product.SAU_TRAI || 0}/${product.SAU_GIUA || 0}
+        `;
+            } else if (product.tenHangHoa.includes('Chữ L')) {
+                return `
+            Dài (P/T): ${product.DAI_PHAI || 0}/${product.DAI_TRAI || 0}<br>
+            Cao (P/T): ${product.CAO_PHAI || 0}/${product.CAO_TRAI || 0}<br>
+            Sâu (P/T): ${product.SAU_PHAI || 0}/${product.SAU_TRAI || 0}
+        `;
+            } else {
+                return `${product.DAI_PHAI || 0} x ${product.CAO_PHAI || 0} x ${product.SAU_PHAI || 0}`;
+            }
         }
 
         function populateFilters() {
@@ -323,10 +395,12 @@
             const categories = new Set();
 
             for (const maHangHoa in allProducts) {
-                allProducts[maHangHoa].forEach(product => {
-                    if (product.mau) colors.add(product.mau);
-                    if (product.nhomHangHoa) categories.add(product.nhomHangHoa);
-                });
+                if (Array.isArray(allProducts[maHangHoa])) {
+                    allProducts[maHangHoa].forEach(product => {
+                        if (product.mau) colors.add(product.mau);
+                        if (product.nhomHangHoa) categories.add(product.nhomHangHoa);
+                    });
+                }
             }
 
             const colorFilters = $('#colorFilters');
@@ -349,9 +423,6 @@
                 placeholder: 'Chọn nhóm hàng hóa',
                 allowClear: true
             });
-
-            colorFilters.on('change', updateFilters);
-            categoryFilters.on('change', updateFilters);
         }
 
         function updateFilters() {
@@ -362,17 +433,20 @@
 
         function searchProducts() {
             const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const selectedColors = $('#colorFilters').val() || [];
+            const selectedCategories = $('#categoryFilters').val() || [];
+
             const filteredProducts = {};
 
             for (const maHangHoa in allProducts) {
                 const matchingProducts = allProducts[maHangHoa].filter(product =>
                     (searchTerm === '' ||
-                        (product.tenHangHoa && product.tenHangHoa.toLowerCase().includes(searchTerm)) ||
+                        product.tenHangHoa.toLowerCase().includes(searchTerm) ||
                         (product.mau && product.mau.toLowerCase().includes(searchTerm)) ||
                         (product.moTa && product.moTa.toLowerCase().includes(searchTerm)) ||
                         (product.nhomHangHoa && product.nhomHangHoa.toLowerCase().includes(searchTerm))) &&
-                    (filters.colors.length === 0 || (product.mau && filters.colors.includes(product.mau))) &&
-                    (filters.categories.length === 0 || (product.nhomHangHoa && filters.categories.includes(product.nhomHangHoa)))
+                    (selectedColors.length === 0 || (product.mau && selectedColors.includes(product.mau))) &&
+                    (selectedCategories.length === 0 || (product.nhomHangHoa && selectedCategories.includes(product.nhomHangHoa)))
                 );
 
                 if (matchingProducts.length > 0) {
@@ -382,10 +456,19 @@
 
             displayProducts(filteredProducts);
         }
-
-        function addToCart(product) {
-            currentEditingProduct = { ...product, quantity: 1 };
-            showDimensionsModal(currentEditingProduct);
+        function addToCart(maHangHoa, productId) {
+            const product = allProducts[maHangHoa].find(p => p.id === productId);
+            if (product) {
+                const existingItem = cart.find(item => item.id === productId);
+                if (existingItem) {
+                    existingItem.quantity += 1;
+                } else {
+                    cart.push({ ...product, quantity: 1 });
+                }
+                localStorage.setItem('cart', JSON.stringify(cart));
+                updateCartIcon();
+                displayCart();
+            }
         }
 
         function showDimensionsModal(product) {
@@ -491,45 +574,36 @@
         }
 
         function saveDimensions() {
-            const updatedProduct = { ...currentEditingProduct };
+            const updatedItem = { ...cart[currentEditingIndex] };
 
-            if (updatedProduct.tenHangHoa.includes('Chữ U')) {
-                updatedProduct.DAI_PHAI = parseFloat(document.getElementById('daiPhai').value) || 0;
-                updatedProduct.DAI_TRAI = parseFloat(document.getElementById('daiTrai').value) || 0;
-                updatedProduct.DAI_GIUA = parseFloat(document.getElementById('daiGiua').value) || 0;
-                updatedProduct.CAO_PHAI = parseFloat(document.getElementById('caoPhai').value) || 0;
-                updatedProduct.CAO_TRAI = parseFloat(document.getElementById('caoTrai').value) || 0;
-                updatedProduct.CAO_GIUA = parseFloat(document.getElementById('caoGiua').value) || 0;
-                updatedProduct.SAU_PHAI = parseFloat(document.getElementById('sauPhai').value) || 0;
-                updatedProduct.SAU_TRAI = parseFloat(document.getElementById('sauTrai').value) || 0;
-                updatedProduct.SAU_GIUA = parseFloat(document.getElementById('sauGiua').value) || 0;
-            } else if (updatedProduct.tenHangHoa.includes('Chữ L')) {
-                updatedProduct.DAI_PHAI = parseFloat(document.getElementById('daiPhai').value) || 0;
-                updatedProduct.DAI_TRAI = parseFloat(document.getElementById('daiTrai').value) || 0;
-                updatedProduct.CAO_PHAI = parseFloat(document.getElementById('caoPhai').value) || 0;
-                updatedProduct.CAO_TRAI = parseFloat(document.getElementById('caoTrai').value) || 0;
-                updatedProduct.SAU_PHAI = parseFloat(document.getElementById('sauPhai').value) || 0;
-                updatedProduct.SAU_TRAI = parseFloat(document.getElementById('sauTrai').value) || 0;
+            if (updatedItem.tenHangHoa.includes('Chữ U')) {
+                updatedItem.DAI_PHAI = parseFloat(document.getElementById('daiPhai').value) || 0;
+                updatedItem.DAI_TRAI = parseFloat(document.getElementById('daiTrai').value) || 0;
+                updatedItem.DAI_GIUA = parseFloat(document.getElementById('daiGiua').value) || 0;
+                updatedItem.CAO_PHAI = parseFloat(document.getElementById('caoPhai').value) || 0;
+                updatedItem.CAO_TRAI = parseFloat(document.getElementById('caoTrai').value) || 0;
+                updatedItem.CAO_GIUA = parseFloat(document.getElementById('caoGiua').value) || 0;
+                updatedItem.SAU_PHAI = parseFloat(document.getElementById('sauPhai').value) || 0;
+                updatedItem.SAU_TRAI = parseFloat(document.getElementById('sauTrai').value) || 0;
+                updatedItem.SAU_GIUA = parseFloat(document.getElementById('sauGiua').value) || 0;
+            } else if (updatedItem.tenHangHoa.includes('Chữ L')) {
+                // Tương tự cho Chữ L
+                updatedItem.DAI_PHAI = parseFloat(document.getElementById('daiPhai').value) || 0;
+                updatedItem.DAI_TRAI = parseFloat(document.getElementById('daiTrai').value) || 0;
+                updatedItem.CAO_PHAI = parseFloat(document.getElementById('caoPhai').value) || 0;
+                updatedItem.CAO_TRAI = parseFloat(document.getElementById('caoTrai').value) || 0;
+                updatedItem.SAU_PHAI = parseFloat(document.getElementById('sauPhai').value) || 0;
+                updatedItem.SAU_TRAI = parseFloat(document.getElementById('sauTrai').value) || 0;
             } else {
-                updatedProduct.DAI_PHAI = parseFloat(document.getElementById('daiPhai').value) || 0;
-                updatedProduct.CAO_PHAI = parseFloat(document.getElementById('caoPhai').value) || 0;
-                updatedProduct.SAU_PHAI = parseFloat(document.getElementById('sauPhai').value) || 0;
+                // Tương tự cho các sản phẩm khác
+                updatedItem.DAI_PHAI = parseFloat(document.getElementById('daiPhai').value) || 0;
+                updatedItem.CAO_PHAI = parseFloat(document.getElementById('caoPhai').value) || 0;
+                updatedItem.SAU_PHAI = parseFloat(document.getElementById('sauPhai').value) || 0;
             }
 
-            const existingProductIndex = cart.findIndex(item =>
-                item.maHangHoa === updatedProduct.maHangHoa &&
-                getDisplayDimensions(item) === getDisplayDimensions(updatedProduct)
-            );
-
-            if (existingProductIndex !== -1) {
-                cart[existingProductIndex].quantity += 1;
-            } else {
-                updatedProduct.quantity = 1;
-                cart.push(updatedProduct);
-            }
-
+            cart[currentEditingIndex] = updatedItem;
             localStorage.setItem('cart', JSON.stringify(cart));
-            updateCartIcon();
+            displayCart();
 
             const modal = bootstrap.Modal.getInstance(document.getElementById('dimensionsModal'));
             modal.hide();
@@ -546,25 +620,123 @@
                 total += itemTotal;
 
                 cartItem.innerHTML = `
-                    <img src="${item.hinhAnh}" alt="${item.tenHangHoa}">
-                    <div class="cart-item-details">
-                        <h5>${item.tenHangHoa} - ${item.mau}</h5>
-                        <p>Kích thước: ${getDisplayDimensions(item)}</p>
-                        <p>Đơn giá: ${item.donGia.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</p>
-                        <div class="input-group mb-3" style="max-width: 150px;">
-                            <button class="btn btn-outline-secondary" type="button" onclick="updateQuantity(${index}, -1)">-</button>
-                            <input type="text" class="form-control text-center" value="${item.quantity}" readonly>
-                            <button class="btn btn-outline-secondary" type="button" onclick="updateQuantity(${index}, 1)">+</button>
-                        </div>
-                        <p>Tổng: ${itemTotal.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</p>
-                    </div>
-                    <button onclick="removeFromCart(${index})" class="btn btn-sm btn-danger align-self-start">Xóa</button>
-                `;
+            <img src="${item.hinhAnh}" alt="${item.tenHangHoa}">
+            <div class="cart-item-details">
+                <h5>${item.tenHangHoa} - ${item.mau}</h5>
+                <p>Kích thước: ${getDisplayDimensions(item)}</p>
+                <button onclick="editDimensions(${index})" class="btn btn-sm btn-secondary">Sửa kích thước</button>
+                <p>Đơn giá: ${item.donGia.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</p>
+                <div class="input-group mb-3" style="max-width: 150px;">
+                    <button class="btn btn-outline-secondary" type="button" onclick="updateQuantity(${index}, -1)">-</button>
+                    <input type="text" class="form-control text-center" value="${item.quantity}" readonly>
+                    <button class="btn btn-outline-secondary" type="button" onclick="updateQuantity(${index}, 1)">+</button>
+                </div>
+                <p>Tổng: ${itemTotal.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</p>
+            </div>
+            <button onclick="removeFromCart(${index})" class="btn btn-sm btn-danger align-self-start">Xóa</button>
+        `;
                 cartItems.appendChild(cartItem);
             });
 
             document.getElementById('cartTotal').textContent = total.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
             updateCartIcon();
+        }
+        function editDimensions(index) {
+            const item = cart[index];
+            currentEditingIndex = index;
+
+            console.log("Editing item:", item); // Log để kiểm tra
+
+            const modalBody = document.getElementById('dimensionsModalBody');
+            modalBody.innerHTML = '';
+
+            if (item.tenHangHoa.includes('Chữ U')) {
+                modalBody.innerHTML = `
+            <div class="mb-3">
+                <label for="daiPhai" class="form-label">Dài phải</label>
+                <input type="number" class="form-control" id="daiPhai" value="${item.DAI_PHAI || 0}">
+            </div>
+            <div class="mb-3">
+                <label for="daiTrai" class="form-label">Dài trái</label>
+                <input type="number" class="form-control" id="daiTrai" value="${item.DAI_TRAI || 0}">
+            </div>
+            <div class="mb-3">
+                <label for="daiGiua" class="form-label">Dài giữa</label>
+                <input type="number" class="form-control" id="daiGiua" value="${item.DAI_GIUA || 0}">
+            </div>
+            <div class="mb-3">
+                <label for="caoPhai" class="form-label">Cao phải</label>
+                <input type="number" class="form-control" id="caoPhai" value="${item.CAO_PHAI || 0}">
+            </div>
+            <div class="mb-3">
+                <label for="caoTrai" class="form-label">Cao trái</label>
+                <input type="number" class="form-control" id="caoTrai" value="${item.CAO_TRAI || 0}">
+            </div>
+            <div class="mb-3">
+                <label for="caoGiua" class="form-label">Cao giữa</label>
+                <input type="number" class="form-control" id="caoGiua" value="${item.CAO_GIUA || 0}">
+            </div>
+            <div class="mb-3">
+                <label for="sauPhai" class="form-label">Sâu phải</label>
+                <input type="number" class="form-control" id="sauPhai" value="${item.SAU_PHAI || 0}">
+            </div>
+            <div class="mb-3">
+                <label for="sauTrai" class="form-label">Sâu trái</label>
+                <input type="number" class="form-control" id="sauTrai" value="${item.SAU_TRAI || 0}">
+            </div>
+            <div class="mb-3">
+                <label for="sauGiua" class="form-label">Sâu giữa</label>
+                <input type="number" class="form-control" id="sauGiua" value="${item.SAU_GIUA || 0}">
+            </div>
+        `;
+            } else if (item.tenHangHoa.includes('Chữ L')) {
+                modalBody.innerHTML = `
+            <div class="mb-3">
+                <label for="daiPhai" class="form-label">Dài phải</label>
+                <input type="number" class="form-control" id="daiPhai" value="${item.DAI_PHAI || 0}">
+            </div>
+            <div class="mb-3">
+                <label for="daiTrai" class="form-label">Dài trái</label>
+                <input type="number" class="form-control" id="daiTrai" value="${item.DAI_TRAI || 0}">
+            </div>
+            <div class="mb-3">
+                <label for="caoPhai" class="form-label">Cao phải</label>
+                <input type="number" class="form-control" id="caoPhai" value="${item.CAO_PHAI || 0}">
+            </div>
+            <div class="mb-3">
+                <label for="caoTrai" class="form-label">Cao trái</label>
+                <input type="number" class="form-control" id="caoTrai" value="${item.CAO_TRAI || 0}">
+            </div>
+            <div class="mb-3">
+                <label for="sauPhai" class="form-label">Sâu phải</label>
+                <input type="number" class="form-control" id="sauPhai" value="${item.SAU_PHAI || 0}">
+            </div>
+            <div class="mb-3">
+                <label for="sauTrai" class="form-label">Sâu trái</label>
+                <input type="number" class="form-control" id="sauTrai" value="${item.SAU_TRAI || 0}">
+            </div>
+        `;
+            } else {
+                modalBody.innerHTML = `
+            <div class="mb-3">
+                <label for="daiPhai" class="form-label">Dài</label>
+                <input type="number" class="form-control" id="daiPhai" value="${item.DAI_PHAI || 0}">
+            </div>
+            <div class="mb-3">
+                <label for="caoPhai" class="form-label">Cao</label>
+                <input type="number" class="form-control" id="caoPhai" value="${item.CAO_PHAI || 0}">
+            </div>
+            <div class="mb-3">
+                <label for="sauPhai" class="form-label">Sâu</label>
+                <input type="number" class="form-control" id="sauPhai" value="${item.SAU_PHAI || 0}">
+            </div>
+        `;
+            }
+
+            console.log("Modal body content:", modalBody.innerHTML); // Log để kiểm tra
+
+            const modal = new bootstrap.Modal(document.getElementById('dimensionsModal'));
+            modal.show();
         }
 
         function updateQuantity(index, change) {
