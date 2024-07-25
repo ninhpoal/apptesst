@@ -431,23 +431,52 @@
             searchProducts();
         }
 
+        function removeVietnameseTones(str) {
+            str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, "a");
+            str = str.replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g, "e");
+            str = str.replace(/ì|í|ị|ỉ|ĩ/g, "i");
+            str = str.replace(/ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ/g, "o");
+            str = str.replace(/ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ/g, "u");
+            str = str.replace(/ỳ|ý|ỵ|ỷ|ỹ/g, "y");
+            str = str.replace(/đ/g, "d");
+            str = str.replace(/À|Á|Ạ|Ả|Ã|Â|Ầ|Ấ|Ậ|Ẩ|Ẫ|Ă|Ằ|Ắ|Ặ|Ẳ|Ẵ/g, "A");
+            str = str.replace(/È|É|Ẹ|Ẻ|Ẽ|Ê|Ề|Ế|Ệ|Ể|Ễ/g, "E");
+            str = str.replace(/Ì|Í|Ị|Ỉ|Ĩ/g, "I");
+            str = str.replace(/Ò|Ó|Ọ|Ỏ|Õ|Ô|Ồ|Ố|Ộ|Ổ|Ỗ|Ơ|Ờ|Ớ|Ợ|Ở|Ỡ/g, "O");
+            str = str.replace(/Ù|Ú|Ụ|Ủ|Ũ|Ư|Ừ|Ứ|Ự|Ử|Ữ/g, "U");
+            str = str.replace(/Ỳ|Ý|Ỵ|Ỷ|Ỹ/g, "Y");
+            str = str.replace(/Đ/g, "D");
+            return str;
+        }
+
         function searchProducts() {
-            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const searchTerm = removeVietnameseTones(document.getElementById('searchInput').value.toLowerCase());
             const selectedColors = $('#colorFilters').val() || [];
             const selectedCategories = $('#categoryFilters').val() || [];
 
             const filteredProducts = {};
 
             for (const maHangHoa in allProducts) {
-                const matchingProducts = allProducts[maHangHoa].filter(product =>
-                    (searchTerm === '' ||
-                        product.tenHangHoa.toLowerCase().includes(searchTerm) ||
-                        (product.mau && product.mau.toLowerCase().includes(searchTerm)) ||
-                        (product.moTa && product.moTa.toLowerCase().includes(searchTerm)) ||
-                        (product.nhomHangHoa && product.nhomHangHoa.toLowerCase().includes(searchTerm))) &&
-                    (selectedColors.length === 0 || (product.mau && selectedColors.includes(product.mau))) &&
-                    (selectedCategories.length === 0 || (product.nhomHangHoa && selectedCategories.includes(product.nhomHangHoa)))
-                );
+                const matchingProducts = allProducts[maHangHoa].filter(product => {
+                    const normalizedTenHangHoa = removeVietnameseTones(product.tenHangHoa.toLowerCase());
+                    const normalizedMau = product.mau ? removeVietnameseTones(product.mau.toLowerCase()) : '';
+                    const normalizedMoTa = product.moTa ? removeVietnameseTones(product.moTa.toLowerCase()) : '';
+                    const normalizedNhomHangHoa = product.nhomHangHoa ? removeVietnameseTones(product.nhomHangHoa.toLowerCase()) : '';
+
+                    const matchesSearch = searchTerm === '' ||
+                        normalizedTenHangHoa.includes(searchTerm) ||
+                        normalizedMau.includes(searchTerm) ||
+                        normalizedMoTa.includes(searchTerm) ||
+                        normalizedNhomHangHoa.includes(searchTerm);
+
+                    const matchesColor = selectedColors.length === 0 ||
+                        (product.mau && selectedColors.includes(product.mau));
+
+                    const matchesCategory = selectedCategories.length === 0 ||
+                        (product.nhomHangHoa && selectedCategories.includes(product.nhomHangHoa));
+
+                    return matchesSearch && matchesColor && matchesCategory;
+                });
 
                 if (matchingProducts.length > 0) {
                     filteredProducts[maHangHoa] = matchingProducts;
