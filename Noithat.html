@@ -8,199 +8,7 @@
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f8f9fa;
-        }
-
-        .container1 {
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        .filters {
-            background-color: #f8f9fa;
-            padding: 15px;
-            border-radius: 5px;
-            margin-bottom: 20px;
-        }
-
-        .filter-group {
-            margin-bottom: 0;
-        }
-
-        .filter-container {
-            display: flex;
-            align-items: flex-end;
-        }
-
-        .select2-container {
-            width: 100% !important;
-        }
-
-        .product-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 20px;
-        }
-
-        .product-card {
-            background-color: white;
-            border-radius: 8px;
-            padding: 15px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease;
-            display: flex;
-            flex-direction: column;
-            height: 100%;
-        }
-
-        .search-bar input,
-        .filter-group select,
-        .select2-container .select2-selection--multiple {
-            height: 38px;
-            border-radius: 10px;
-            padding-bottom: 8px;
-        }
-
-        .product-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .product-card .product-details {
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .product-card h3 {
-            font-size: 1.1rem;
-            margin-bottom: 10px;
-            color: #333;
-        }
-
-        .product-card p {
-            font-size: 0.9rem;
-            color: #666;
-            margin-bottom: 5px;
-        }
-
-        .product-card .btn {
-            margin-top: auto;
-        }
-
-        #cart {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background-color: white;
-            border-radius: 8px;
-            padding: 15px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            max-width: 300px;
-        }
-
-        #cartIcon {
-            position: fixed;
-            top: 90%;
-
-            right: 20px;
-            background-color: white;
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            cursor: pointer;
-            z-index: 1000;
-        }
-
-        #cartIcon .badge {
-            position: absolute;
-            top: -5px;
-            right: -5px;
-        }
-
-        #cartModal .modal-body {
-            max-height: 70vh;
-            overflow-y: auto;
-        }
-
-        .cart-item {
-            display: flex;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-
-        .cart-item img {
-            width: 80px;
-            height: 80px;
-            object-fit: cover;
-            margin-right: 15px;
-        }
-
-        .cart-item-details {
-            flex-grow: 1;
-        }
-
-        #loading {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(255, 255, 255, 0.8);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-        }
-
-        .search-bar input,
-        .filter-group select,
-        .select2-container .select2-selection--multiple {
-            height: 38px;
-            border-radius: 10px;
-        }
-
-        .spinner {
-            width: 50px;
-            height: 50px;
-            border: 5px solid #f3f3f3;
-            border-top: 5px solid #3498db;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            0% {
-                transform: rotate(0deg);
-            }
-
-            100% {
-                transform: rotate(360deg);
-            }
-        }
-
-        @media (max-width: 768px) {
-            .product-grid {
-                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            }
-
-            #cart {
-                position: static;
-                margin-top: 20px;
-                max-width: 100%;
-            }
-
-            .row.mb-4>div {
-                margin-bottom: 15px;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
@@ -273,24 +81,7 @@
             </div>
         </div>
     </div>
-    <div class="modal fade" id="dimensionsModal" tabindex="-1" aria-labelledby="dimensionsModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="dimensionsModalLabel">Chỉnh sửa kích thước</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body" id="dimensionsModalBody">
-                    <!-- Dimensions fields will be dynamically added here -->
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-                    <button type="button" class="btn btn-primary" onclick="saveDimensions()">Lưu</button>
-                </div>
-            </div>
-        </div>
-    </div>
+
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
@@ -351,21 +142,26 @@
 
                         let dimensionsHtml = getDimensionsHtml(product);
 
-                        productCard.innerHTML = ` 
+                        productCard.innerHTML = `
                     <div class="product-image-container">
                         <img src="${product.hinhAnh || ''}" alt="${product.tenHangHoa || ''}">
                     </div>
                     <div class="product-details">
                         <h3>${product.tenHangHoa || 'Không có tên'}</h3>
                         <p><strong>Màu:</strong> ${product.mau || 'Không xác định'}</p>
-                        <p><strong>Nhóm:</strong> ${product.nhomHangHoa || 'Không xác định'}</p>
+                        <p><strong>Nhóm:</strong> ${product.tag || 'Không xác định'}</p>
                         <p><strong>Đơn giá:</strong> ${product.donGia ? product.donGia.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }) : 'Không xác định'}</p>
                         <p><strong>Kích thước:</strong> ${dimensionsHtml}</p>
                         <p><strong>Mô tả:</strong> ${product.moTa || 'Không có mô tả'}</p>
-                        <button onclick="addToCart('${maHangHoa}', ${product.id})" class="btn btn-primary">Thêm vào giỏ hàng</button>
                     </div>
                 `;
 
+                        const addToCartButton = document.createElement('button');
+                        addToCartButton.textContent = 'Thêm vào giỏ hàng';
+                        addToCartButton.className = 'btn btn-primary';
+                        addToCartButton.addEventListener('click', () => addToCart(maHangHoa, product.idHinhAnh));
+
+                        productCard.querySelector('.product-details').appendChild(addToCartButton);
                         productList.appendChild(productCard);
                     });
                 }
@@ -373,20 +169,21 @@
         }
 
         function getDimensionsHtml(product) {
+            const { dai, cao, sau } = product.kichThuoc;
             if (product.tenHangHoa.includes('Chữ U')) {
                 return `
-            Dài (P/T/G): ${product.DAI_PHAI || 0}/${product.DAI_TRAI || 0}/${product.DAI_GIUA || 0}<br>
-            Cao (P/T/G): ${product.CAO_PHAI || 0}/${product.CAO_TRAI || 0}/${product.CAO_GIUA || 0}<br>
-            Sâu (P/T/G): ${product.SAU_PHAI || 0}/${product.SAU_TRAI || 0}/${product.SAU_GIUA || 0}
+            Dài (P/T/G): ${dai.phai || 0}/${dai.trai || 0}/${dai.giua || 0}<br>
+            Cao (P/T/G): ${cao.phai || 0}/${cao.trai || 0}/${cao.giua || 0}<br>
+            Sâu (P/T/G): ${sau.phai || 0}/${sau.trai || 0}/${sau.giua || 0}
         `;
             } else if (product.tenHangHoa.includes('Chữ L')) {
                 return `
-            Dài (P/T): ${product.DAI_PHAI || 0}/${product.DAI_TRAI || 0}<br>
-            Cao (P/T): ${product.CAO_PHAI || 0}/${product.CAO_TRAI || 0}<br>
-            Sâu (P/T): ${product.SAU_PHAI || 0}/${product.SAU_TRAI || 0}
+            Dài (P/T): ${dai.phai || 0}/${dai.trai || 0}<br>
+            Cao (P/T): ${cao.phai || 0}/${cao.trai || 0}<br>
+            Sâu (P/T): ${sau.phai || 0}/${sau.trai || 0}
         `;
             } else {
-                return `${product.DAI_PHAI || 0} x ${product.CAO_PHAI || 0} x ${product.SAU_PHAI || 0}`;
+                return `${dai.phai || 0} x ${cao.phai || 0} x ${sau.phai || 0}`;
             }
         }
 
@@ -485,14 +282,39 @@
 
             displayProducts(filteredProducts);
         }
-        function addToCart(maHangHoa, productId) {
-            const product = allProducts[maHangHoa].find(p => p.id === productId);
+        function addToCart(maHangHoa, idHinhAnh) {
+            const product = allProducts[maHangHoa].find(p => p.idHinhAnh === idHinhAnh);
             if (product) {
-                const existingItem = cart.find(item => item.id === productId);
-                if (existingItem) {
-                    existingItem.quantity += 1;
+                const { klDonVi, donGia, thanhTien } = calculateProductDetails(product);
+                const cartItem = {
+                    maHangHoa: product.maHangHoa,
+                    idHinhAnh: product.idHinhAnh,
+                    tenHangHoa: product.tenHangHoa,
+                    chiTietSP: product.chiTietSP,
+                    donViTinh: product.donViTinh,
+                    hinhAnh: product.hinhAnh, // Thêm thông tin hình ảnh
+                    daiphai: product.kichThuoc.dai.phai,
+                    daitrai: product.kichThuoc.dai.trai,
+                    daigiua: product.kichThuoc.dai.giua,
+                    caophai: product.kichThuoc.cao.phai,
+                    caotrai: product.kichThuoc.cao.trai,
+                    caogiua: product.kichThuoc.cao.giua,
+                    sauphai: product.kichThuoc.sau.phai,
+                    sautrai: product.kichThuoc.sau.trai,
+                    saugiua: product.kichThuoc.sau.giua,
+                    klDonVi,
+                    nhanBanSP: product.nhanBanSP,
+                    donGia,
+                    thanhTien,
+                    quantity: 1
+                };
+
+                const existingItemIndex = cart.findIndex(item => item.idHinhAnh === idHinhAnh);
+                if (existingItemIndex !== -1) {
+                    cart[existingItemIndex].quantity += 1;
+                    cart[existingItemIndex].thanhTien = cart[existingItemIndex].quantity * thanhTien;
                 } else {
-                    cart.push({ ...product, quantity: 1 });
+                    cart.push(cartItem);
                 }
                 localStorage.setItem('cart', JSON.stringify(cart));
                 updateCartIcon();
@@ -500,107 +322,43 @@
             }
         }
 
-        function showDimensionsModal(product) {
-            const modalBody = document.getElementById('dimensionsModalBody');
-            modalBody.innerHTML = '';
+        function calculateProductDetails(product) {
+            let klDonVi = 0;
+            let dai = 0, cao = 0, sau = 0;
 
-            if (product.tenHangHoa.includes('Chữ U')) {
-                modalBody.innerHTML = `
-                    <div class="mb-3">
-                        <label for="daiPhai" class="form-label">Dài phải</label>
-                        <input type="number" class="form-control" id="daiPhai" value="${product.DAI_PHAI || ''}">
-                    </div>
-                    <div class="mb-3">
-                        <label for="daiTrai" class="form-label">Dài trái</label>
-                        <input type="number" class="form-control" id="daiTrai" value="${product.DAI_TRAI || ''}">
-                    </div>
-                    <div class="mb-3">
-                        <label for="daiGiua" class="form-label">Dài giữa</label>
-                        <input type="number" class="form-control" id="daiGiua" value="${product.DAI_GIUA || ''}">
-                    </div>
-                    <div class="mb-3">
-                        <label for="caoPhai" class="form-label">Cao phải</label>
-                        <input type="number" class="form-control" id="caoPhai" value="${product.CAO_PHAI || ''}">
-                    </div>
-                    <div class="mb-3">
-                        <label for="caoTrai" class="form-label">Cao trái</label>
-                        <input type="number" class="form-control" id="caoTrai" value="${product.CAO_TRAI || ''}">
-                    </div>
-                    <div class="mb-3">
-                        <label for="caoGiua" class="form-label">Cao giữa</label>
-                        <input type="number" class="form-control" id="caoGiua" value="${product.CAO_GIUA || ''}">
-                    </div>
-                    <div class="mb-3">
-                        <label for="sauPhai" class="form-label">Sâu phải</label>
-                        <input type="number" class="form-control" id="sauPhai" value="${product.SAU_PHAI || ''}">
-                    </div>
-                    <div class="mb-3">
-                        <label for="sauTrai" class="form-label">Sâu trái</label>
-                        <input type="number" class="form-control" id="sauTrai" value="${product.SAU_TRAI || ''}">
-                    </div>
-                    <div class="mb-3">
-                        <label for="sauGiua" class="form-label">Sâu giữa</label>
-                        <input type="number" class="form-control" id="sauGiua" value="${product.SAU_GIUA || ''}">
-                    </div>
-                `;
-            } else if (product.tenHangHoa.includes('Chữ L')) {
-                modalBody.innerHTML = `
-                    <div class="mb-3">
-                        <label for="daiPhai" class="form-label">Dài phải</label>
-                        <input type="number" class="form-control" id="daiPhai" value="${product.DAI_PHAI || ''}">
-                    </div>
-                    <div class="mb-3">
-                        <label for="daiTrai" class="form-label">Dài trái</label>
-                        <input type="number" class="form-control" id="daiTrai" value="${product.DAI_TRAI || ''}">
-                    </div>
-                    <div class="mb-3">
-                        <label for="caoPhai" class="form-label">Cao phải</label>
-                        <input type="number" class="form-control" id="caoPhai" value="${product.CAO_PHAI || ''}">
-                    </div>
-                    <div class="mb-3">
-                        <label for="caoTrai" class="form-label">Cao</div>
-                    <div class="mb-3">
-                        <label for="caoTrai" class="form-label">Cao trái</label>
-                        <input type="number" class="form-control" id="caoTrai" value="${product.CAO_TRAI || ''}">
-                    </div>
-                    <div class="mb-3">
-                        <label for="sauPhai" class="form-label">Sâu phải</label>
-                        <input type="number" class="form-control" id="sauPhai" value="${product.SAU_PHAI || ''}">
-                    </div>
-                    <div class="mb-3">
-                        <label for="sauTrai" class="form-label">Sâu trái</label>
-                        <input type="number" class="form-control" id="sauTrai" value="${product.SAU_TRAI || ''}">
-                    </div>
-                `;
+            if (product.tenHangHoa.toUpperCase().includes('*CHU U')) {
+                dai = (product.daiphai || 0) + (product.daitrai || 0) + (product.daigiua || 0);
+                cao = (product.caophai || 0) + (product.caotrai || 0) + (product.caogiua || 0);
+                sau = (product.sauphai || 0) + (product.sautrai || 0) + (product.saugiua || 0);
+            } else if (product.tenHangHoa.toUpperCase().includes('*CHU L')) {
+                dai = (product.daiphai || 0) + (product.daitrai || 0);
+                cao = (product.caophai || 0) + (product.caotrai || 0);
+                sau = (product.sauphai || 0) + (product.sautrai || 0);
             } else {
-                modalBody.innerHTML = `
-                    <div class="mb-3">
-                        <label for="daiPhai" class="form-label">Dài</label>
-                        <input type="number" class="form-control" id="daiPhai" value="${product.DAI_PHAI || ''}">
-                    </div>
-                    <div class="mb-3">
-                        <label for="caoPhai" class="form-label">Cao</label>
-                        <input type="number" class="form-control" id="caoPhai" value="${product.CAO_PHAI || ''}">
-                    </div>
-                    <div class="mb-3">
-                        <label for="sauPhai" class="form-label">Sâu</label>
-                        <input type="number" class="form-control" id="sauPhai" value="${product.SAU_PHAI || ''}">
-                    </div>
-                `;
+                dai = product.daiphai || 0;
+                cao = product.caophai || 0;
+                sau = product.sauphai || 0;
             }
 
-            const modal = new bootstrap.Modal(document.getElementById('dimensionsModal'));
-            modal.show();
-        }
-        function getDisplayDimensions(item) {
-            if (item.tenHangHoa.includes('Chữ U')) {
-                return `${item.DAI_PHAI}x${item.DAI_TRAI}x${item.DAI_GIUA} - ${item.CAO_PHAI}x${item.CAO_TRAI}x${item.CAO_GIUA} - ${item.SAU_PHAI}x${item.SAU_TRAI}x${item.SAU_GIUA}`;
-            } else if (item.tenHangHoa.includes('Chữ L')) {
-                return `${item.DAI_PHAI}x${item.DAI_TRAI} - ${item.CAO_PHAI}x${item.CAO_TRAI} - ${item.SAU_PHAI}x${item.SAU_TRAI}`;
-            } else {
-                return `${item.DAI_PHAI}x${item.CAO_PHAI}x${item.SAU_PHAI}`;
+            if (product.donViTinh === "Mét dài") {
+                klDonVi = dai / 1000;
+            } else if (product.donViTinh === "Mét vuông") {
+                klDonVi = (dai * cao) / 1000000; // Chuyển đổi từ mm² sang m²
             }
+
+            const donGia = product.donGia;
+            let thanhTien = 0;
+
+            if (product.donViTinh === "Mét dài") {
+                thanhTien = klDonVi * donGia;
+            } else if (product.donViTinh === "Mét vuông") {
+                thanhTien = klDonVi * donGia * product.nhanBanSP;
+            }
+
+            return { klDonVi, donGia, thanhTien };
         }
+
+
 
         function saveDimensions() {
             const updatedItem = { ...cart[currentEditingIndex] };
@@ -637,6 +395,7 @@
             const modal = bootstrap.Modal.getInstance(document.getElementById('dimensionsModal'));
             modal.hide();
         }
+
         function displayCart() {
             const cartItems = document.getElementById('cartItems');
             cartItems.innerHTML = '';
@@ -645,24 +404,33 @@
             cart.forEach((item, index) => {
                 const cartItem = document.createElement('div');
                 cartItem.className = 'cart-item';
-                const itemTotal = item.quantity * item.donGia;
-                total += itemTotal;
+                const { thanhTien } = calculateProductDetails(item);
+                total += thanhTien * item.quantity;
 
                 cartItem.innerHTML = `
-            <img src="${item.hinhAnh}" alt="${item.tenHangHoa}">
-            <div class="cart-item-details">
-                <h5>${item.tenHangHoa} - ${item.mau}</h5>
-                <p>Kích thước: ${getDisplayDimensions(item)}</p>
-                <button onclick="editDimensions(${index})" class="btn btn-sm btn-secondary">Sửa kích thước</button>
-                <p>Đơn giá: ${item.donGia.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</p>
-                <div class="input-group mb-3" style="max-width: 150px;">
-                    <button class="btn btn-outline-secondary" type="button" onclick="updateQuantity(${index}, -1)">-</button>
-                    <input type="text" class="form-control text-center" value="${item.quantity}" readonly>
-                    <button class="btn btn-outline-secondary" type="button" onclick="updateQuantity(${index}, 1)">+</button>
-                </div>
-                <p>Tổng: ${itemTotal.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</p>
+            <div class="cart-item-image">
+                <img src="${item.hinhAnh || 'placeholder.jpg'}" alt="${item.tenHangHoa}" style="width: 100px; height: 100px; object-fit: cover;">
             </div>
-            <button onclick="removeFromCart(${index})" class="btn btn-sm btn-danger align-self-start">Xóa</button>
+            <div class="cart-item-details">
+                <h5>${item.tenHangHoa}</h5>
+                <p>Mã hàng hóa: ${item.maHangHoa}</p>
+                <p>Chi tiết: ${item.chiTietSP}</p>
+                <p>Đơn vị tính: ${item.donViTinh}</p>
+               <div class="dimensions">
+                    <label>Kích thước: </label>
+                    ${getDimensionsInputs(item, index)}
+                </div>
+                <p>KL Đơn vị: ${item.klDonVi.toFixed(2)}</p>
+                <p>Nhân bản SP: ${item.nhanBanSP}</p>
+                <p>Đơn giá: ${item.donGia.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</p>
+                <p>Thành tiền: ${(thanhTien * item.quantity).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</p>
+                <div class="quantity">
+                    <button onclick="updateQuantity(${index}, -1)">-</button>
+                    <input type="number" value="${item.quantity}" onchange="updateQuantity(${index}, this.value - ${item.quantity})">
+                    <button onclick="updateQuantity(${index}, 1)">+</button>
+                </div>
+                <button onclick="removeFromCart(${index})">Xóa</button>
+            </div>
         `;
                 cartItems.appendChild(cartItem);
             });
@@ -670,113 +438,53 @@
             document.getElementById('cartTotal').textContent = total.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
             updateCartIcon();
         }
-        function editDimensions(index) {
-            const item = cart[index];
-            currentEditingIndex = index;
 
-            console.log("Editing item:", item); // Log để kiểm tra
+        function getDimensionsInputs(item, index) {
+            let html = '';
+            const dimensions = [
+                { name: 'dai', label: 'Dài' },
+                { name: 'cao', label: 'Cao' },
+                { name: 'sau', label: 'Sâu' }
+            ];
+            let positions;
 
-            const modalBody = document.getElementById('dimensionsModalBody');
-            modalBody.innerHTML = '';
-
-            if (item.tenHangHoa.includes('Chữ U')) {
-                modalBody.innerHTML = `
-            <div class="mb-3">
-                <label for="daiPhai" class="form-label">Dài phải</label>
-                <input type="number" class="form-control" id="daiPhai" value="${item.DAI_PHAI || 0}">
-            </div>
-            <div class="mb-3">
-                <label for="daiTrai" class="form-label">Dài trái</label>
-                <input type="number" class="form-control" id="daiTrai" value="${item.DAI_TRAI || 0}">
-            </div>
-            <div class="mb-3">
-                <label for="daiGiua" class="form-label">Dài giữa</label>
-                <input type="number" class="form-control" id="daiGiua" value="${item.DAI_GIUA || 0}">
-            </div>
-            <div class="mb-3">
-                <label for="caoPhai" class="form-label">Cao phải</label>
-                <input type="number" class="form-control" id="caoPhai" value="${item.CAO_PHAI || 0}">
-            </div>
-            <div class="mb-3">
-                <label for="caoTrai" class="form-label">Cao trái</label>
-                <input type="number" class="form-control" id="caoTrai" value="${item.CAO_TRAI || 0}">
-            </div>
-            <div class="mb-3">
-                <label for="caoGiua" class="form-label">Cao giữa</label>
-                <input type="number" class="form-control" id="caoGiua" value="${item.CAO_GIUA || 0}">
-            </div>
-            <div class="mb-3">
-                <label for="sauPhai" class="form-label">Sâu phải</label>
-                <input type="number" class="form-control" id="sauPhai" value="${item.SAU_PHAI || 0}">
-            </div>
-            <div class="mb-3">
-                <label for="sauTrai" class="form-label">Sâu trái</label>
-                <input type="number" class="form-control" id="sauTrai" value="${item.SAU_TRAI || 0}">
-            </div>
-            <div class="mb-3">
-                <label for="sauGiua" class="form-label">Sâu giữa</label>
-                <input type="number" class="form-control" id="sauGiua" value="${item.SAU_GIUA || 0}">
-            </div>
-        `;
-            } else if (item.tenHangHoa.includes('Chữ L')) {
-                modalBody.innerHTML = `
-            <div class="mb-3">
-                <label for="daiPhai" class="form-label">Dài phải</label>
-                <input type="number" class="form-control" id="daiPhai" value="${item.DAI_PHAI || 0}">
-            </div>
-            <div class="mb-3">
-                <label for="daiTrai" class="form-label">Dài trái</label>
-                <input type="number" class="form-control" id="daiTrai" value="${item.DAI_TRAI || 0}">
-            </div>
-            <div class="mb-3">
-                <label for="caoPhai" class="form-label">Cao phải</label>
-                <input type="number" class="form-control" id="caoPhai" value="${item.CAO_PHAI || 0}">
-            </div>
-            <div class="mb-3">
-                <label for="caoTrai" class="form-label">Cao trái</label>
-                <input type="number" class="form-control" id="caoTrai" value="${item.CAO_TRAI || 0}">
-            </div>
-            <div class="mb-3">
-                <label for="sauPhai" class="form-label">Sâu phải</label>
-                <input type="number" class="form-control" id="sauPhai" value="${item.SAU_PHAI || 0}">
-            </div>
-            <div class="mb-3">
-                <label for="sauTrai" class="form-label">Sâu trái</label>
-                <input type="number" class="form-control" id="sauTrai" value="${item.SAU_TRAI || 0}">
-            </div>
-        `;
+            if (item.tenHangHoa.toUpperCase().includes('*CHU U')) {
+                positions = ['phai', 'trai', 'giua'];
+            } else if (item.tenHangHoa.toUpperCase().includes('*CHU L')) {
+                positions = ['phai', 'trai'];
             } else {
-                modalBody.innerHTML = `
-            <div class="mb-3">
-                <label for="daiPhai" class="form-label">Dài</label>
-                <input type="number" class="form-control" id="daiPhai" value="${item.DAI_PHAI || 0}">
-            </div>
-            <div class="mb-3">
-                <label for="caoPhai" class="form-label">Cao</label>
-                <input type="number" class="form-control" id="caoPhai" value="${item.CAO_PHAI || 0}">
-            </div>
-            <div class="mb-3">
-                <label for="sauPhai" class="form-label">Sâu</label>
-                <input type="number" class="form-control" id="sauPhai" value="${item.SAU_PHAI || 0}">
-            </div>
-        `;
+                positions = ['phai'];
             }
 
-            console.log("Modal body content:", modalBody.innerHTML); // Log để kiểm tra
+            dimensions.forEach(dim => {
+                html += `<div><strong>${dim.label}:</strong> `;
+                positions.forEach(pos => {
+                    const key = `${dim.name}${pos}`;
+                    if (item[key] !== undefined) {
+                        html += `<input type="number" value="${item[key]}" onchange="updateDimension(${index}, '${key}', this.value)"> `;
+                    }
+                });
+                html += '</div>';
+            });
 
-            const modal = new bootstrap.Modal(document.getElementById('dimensionsModal'));
-            modal.show();
+            return html;
         }
-
-        function updateQuantity(index, change) {
-            cart[index].quantity += change;
-            if (cart[index].quantity < 1) {
-                cart[index].quantity = 1;
-            }
+        function updateDimension(index, key, value) {
+            cart[index][key] = parseFloat(value);
+            const updatedProduct = { ...cart[index] };
+            const { klDonVi, thanhTien } = calculateProductDetails(updatedProduct);
+            cart[index].klDonVi = klDonVi;
+            cart[index].thanhTien = thanhTien * cart[index].quantity;
             localStorage.setItem('cart', JSON.stringify(cart));
             displayCart();
         }
 
+        function updateQuantity(index, change) {
+            cart[index].quantity = Math.max(1, cart[index].quantity + change);
+            cart[index].thanhTien = cart[index].donGia * cart[index].quantity * cart[index].klDonVi;
+            localStorage.setItem('cart', JSON.stringify(cart));
+            displayCart();
+        }
         function removeFromCart(index) {
             cart.splice(index, 1);
             localStorage.setItem('cart', JSON.stringify(cart));
@@ -833,9 +541,7 @@
             // Các khởi tạo khác nếu cần
         });
 
-        // Xóa hai dòng này vì chúng đã được gọi trong DOMContentLoaded event
-        // fetchProducts();
-        // updateCartIcon();
+
     </script>
 </body>
 
